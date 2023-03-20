@@ -4,6 +4,11 @@ The issue of potential third party access to private cookies has been a well kno
 
 ## Requirements
 The scanner utilizes Python libraries. To install the dependencies run the following code:
+```
+git clone https://github.com/Cybersecurity-Project-Group/CookieLeakScanner.git
+cd CookieLeakScanner
+pip install -r requirements.txt
+```
 
 ## Link Decorating
 The most straightforward manner in which this is done is called link decoration, where parameters are added to URLs and HTTP packets that are passed to third party services, potentially sharing user data such as cookies or search queries. Although the types of cookies sent to third parties may vary, it could potentially contain sensitive information. Additionally if the third-party service is cloaked using CNAME, SameSite cookies can bypass cross-site limitations. There are no standards for checking the contents of HTTP packets for this and the cookie can be directly accessed by third parties listening in on network traffic, even Secure cookies. 
