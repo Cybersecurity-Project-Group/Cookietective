@@ -5,8 +5,8 @@ The issue of potential third party access to private cookies has been a well kno
 ## Requirements
 The scanner utilizes Python libraries. To install the dependencies run the following code:
 ```
-git clone https://github.com/Cybersecurity-Project-Group/CookieLeakScanner.git
-cd CookieLeakScanner
+git clone https://github.com/Cybersecurity-Project-Group/Cookietective.git
+cd Cookietective
 pip install -r requirements.txt
 ```
 
