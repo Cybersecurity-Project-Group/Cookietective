@@ -2,6 +2,9 @@
 
 The issue of potential third party access to private cookies has been a well known vulnerability and there have been particular security measures put in place on the web which track and limit third party access. For example, many services are in the business of selling user access information to third party servers for the sake of creating an advertising profile unique for each user through saving what websites and information users access. Since this is done through sharing first party cookies with third parties, this sharing is tracked and can be blocked by the aforementioned security procedures which were put in place to prevent malicious third party access. In order to avoid this, many websites now share third party cookies in manners which bypass these security measures.
 
+## Requirements
+The scanner utilizes Python libraries. To install the dependencies run the following code:
+
 ## Link Decorating
 The most straightforward manner in which this is done is called link decoration, where parameters are added to URLs and HTTP packets that are passed to third party services, potentially sharing user data such as cookies or search queries. Although the types of cookies sent to third parties may vary, it could potentially contain sensitive information. Additionally if the third-party service is cloaked using CNAME, SameSite cookies can bypass cross-site limitations. There are no standards for checking the contents of HTTP packets for this and the cookie can be directly accessed by third parties listening in on network traffic, even Secure cookies. 
 
