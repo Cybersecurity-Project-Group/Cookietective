@@ -1,4 +1,5 @@
 import scapy.all as scapy
+import selenium
 
 listCNAMES = []
 
