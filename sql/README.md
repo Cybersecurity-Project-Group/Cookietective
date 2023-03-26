@@ -26,4 +26,4 @@ from my_module import my_function
 This function will add an entry to the sql table with the values specified in the arguments.
 
 #### fetchEntryWebsite(website)
-This function will return the entries from the database that match the website given.
+This function will print the entries from the database that match the website given.

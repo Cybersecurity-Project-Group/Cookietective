@@ -9,8 +9,9 @@ def addEntry(website, ip, vulnerability):
 
 def fetchEntryWebsite(website):
     cur.execute("SELECT * FROM packets WHERE website = ?", (website,))
-    print(cur.fetchall())
-    return
+    result = cur.fetchall()
+    print(result)
+    return result
 
 
 conn.commit()
