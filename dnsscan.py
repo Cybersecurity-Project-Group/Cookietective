@@ -54,15 +54,15 @@ def parseHTTP(packet):
     # Check if on TLS layer (since HTTP and HTTPS requests are only on TCP)
     if (packet.haslayer('TCP')):
         if (packet.haslayer(http.HTTPRequest) or packet.haslayer(http.HTTPResponse)):
-            if (packet.haslayer(scapy.Raw)):
-                keys = ["Domain", "Set-Cookie"]
+            # if (packet.haslayer(scapy.Raw)):
+            #     keys = ["Domain", "Set-Cookie"]
                 # if any(key in packet[scapy.Raw].load for key in keys):
                 #     print(packet[scapy.Raw].load)
-                if (packet.haslayer(http.HTTPRequest)):
-                    print(packet[http.HTTPRequest].fields.get('Cookie'))
-                else:
-                    print(packet[http.HTTPResponse].fields.get('Cookie'))
-
+            if (packet.haslayer(http.HTTPRequest)):
+                print(packet[http.HTTPRequest].fields.get('Cookie'))
+            else:
+                print(packet[http.HTTPResponse].fields.get('Cookie'))
+            print(packet.show())
     # if (packet.haslayer('TCP')):
     #     if(packet['TCP'].payload != scapy.packet.raw):
     #         print(packet.iteritems())
@@ -80,7 +80,7 @@ scapy.load_layer("tls")
 # Listens to traffic for DNS traffic (udp port 53) for 5 seconds then prints summary
 # OR listens to HTTP traffic (port 80 / 443) to search for HTTP packets with cookies
 # scapy.sniff(filter="udp port 53", timeout=5, prn=parseDNS)
-scapy.sniff(filter="port 80 or port 443", timeout=10, prn=parseHTTP)
+scapy.sniff(filter="port 80 or port 443", timeout=400, prn=parseHTTP)
 # scapy.sniff(iface="WiFi 2", store=False, prn=process_packets)
 
 # Iterate through all CNAME packets and list their name, alias pair
