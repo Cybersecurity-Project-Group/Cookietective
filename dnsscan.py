@@ -1,4 +1,5 @@
 import scapy.all as scapy
+from scapy.layers.http import *
 import selenium
 
 listCNAMES = []
@@ -42,21 +43,45 @@ def parseDNS(packet):
                 if (type_field.i2repr(dnsrr, dnsrr.type) == 'A'):
                     has_Atype = True
         
+        # Append DNSRR information to global list if has CNAME entry
         if (has_CNAME):
-            print("here")
             listCNAMES.append(CNAME_packet(dns.an[CNAME_index], has_Atype))
+            packet.show()
                     
 
 
 def parseHTTP(packet):
-    print(packet)
+    # Check if on TLS layer (since HTTP and HTTPS requests are only on TCP)
+    if (packet.haslayer('TCP')):
+        print(packet.show())
+        if (packet.haslayer(HTTPRequest) or packet.haslayer(HTTPResponse) or packet.haslayer('TLS')):
+            print(packet.summary())
+    # if (packet.haslayer('TCP')):
+    #     if(packet['TCP'].payload != scapy.packet.raw):
+    #         print(packet.iteritems())
+
+# def process_packets(packet):
+#     print("here")
+#     if packet.haslayer(http.HTTPRequest):
+#         print("here")
+#         url = packet[http.HTTPRequest].Host + packet[http.HTTPRequest].Path
+#         print('URL: ' + url.decode())
+        
 
 
 # Listens to traffic for DNS traffic (udp port 53) for 5 seconds then prints summary
 # OR listens to HTTP traffic (port 80 / 443) to search for HTTP packets with cookies
 scapy.sniff(filter="udp port 53", timeout=5, prn=parseDNS)
-# scapy.sniff(filter="port 80 or port 443", timeout=5, prn=parseHTTP)
+# scapy.sniff(filter="port 80 or port 443", timeout=200, prn=parseHTTP)
+# scapy.sniff(iface="WiFi 2", store=False, prn=process_packets)
 
 # Iterate through all CNAME packets and list their name, alias pair
 for i, packet in enumerate(listCNAMES):
-    print("CNAME Packet", i, ": ", packet.domain, packet.cname, packet.has_A)
+    print("CNAME Packet", i, ": Domain:", packet.domain, "CNAME Alias:", packet.cname, "Has A-type", packet.has_A)
+    
+# Notes:
+# CNAME packets (with no A-type packet) do NOT contain IP address
+# Megele paper says that (name,value) = (name looked up, name it's seen as)
+# 
+# 
+# 
