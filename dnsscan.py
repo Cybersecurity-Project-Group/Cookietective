@@ -1,5 +1,6 @@
 import scapy.all as scapy
 from scapy.layers import http
+from scapy.layers.ssl_tls import *
 import selenium
 
 listCNAMES = []
@@ -53,7 +54,7 @@ def parseDNS(packet):
 def parseHTTP(packet):
     # Check if on TLS layer (since HTTP and HTTPS requests are only on TCP)
     if (packet.haslayer('TCP')):
-        if (packet.haslayer(http.HTTPRequest) or packet.haslayer(http.HTTPResponse)):
+        if (packet.haslayer(http.HTTPRequest) or packet.haslayer(http.HTTPResponse) or packet.haslayer('SSL_TLS')):
             # if (packet.haslayer(scapy.Raw)):
             #     keys = ["Domain", "Set-Cookie"]
                 # if any(key in packet[scapy.Raw].load for key in keys):
