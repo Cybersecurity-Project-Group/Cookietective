@@ -1,6 +1,6 @@
 import scapy.all as scapy
 from scapy.layers import http
-from scapy.layers.ssl_tls import *
+# from scapy.layers.ssl_tls import *
 import selenium
 
 listCNAMES = []
@@ -16,6 +16,10 @@ class CNAME_packet():
         self.has_A = A
         self.domain = packet.rrname
         self.cname = packet.rdata
+        # if (self.has_A):
+        #     self.ip = packet.ip
+        # else:
+        #     self.ip = None
         
 
 # Function to be run everytime sniffer encounters a DNS packet
@@ -28,6 +32,7 @@ def parseDNS(packet):
         has_CNAME = False
         has_Atype = False
         CNAME_index = 0
+        ip = []
 
         # Check if packet is DNS response (source binded to DNS port)
         if (int(udp.sport) == 53):
@@ -43,11 +48,12 @@ def parseDNS(packet):
                 
                 if (type_field.i2repr(dnsrr, dnsrr.type) == 'A'):
                     has_Atype = True
+                    ip.append(dnsrr.rdata)
         
         # Append DNSRR information to global list if has CNAME entry
         if (has_CNAME):
             listCNAMES.append(CNAME_packet(dns.an[CNAME_index], has_Atype))
-            packet.show()
+            print(ip)
                     
 
 
@@ -80,8 +86,8 @@ scapy.load_layer("tls")
 
 # Listens to traffic for DNS traffic (udp port 53) for 5 seconds then prints summary
 # OR listens to HTTP traffic (port 80 / 443) to search for HTTP packets with cookies
-# scapy.sniff(filter="udp port 53", timeout=5, prn=parseDNS)
-scapy.sniff(filter="port 80 or port 443", timeout=400, prn=parseHTTP)
+scapy.sniff(filter="udp port 53", timeout=15, prn=parseDNS)
+# scapy.sniff(filter="port 80 or port 443", timeout=400, prn=parseHTTP)
 # scapy.sniff(iface="WiFi 2", store=False, prn=process_packets)
 
 # Iterate through all CNAME packets and list their name, alias pair
