@@ -1,0 +1,77 @@
+18:06:49.796636 IP lga34s35-in-f10.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.51415: UDP, length 123
+18:06:49.801470 IP crc-dot1x-nat-10-239-17-28.bu.edu.51415 > lga34s35-in-f10.1e100.net.https: UDP, length 33
+18:06:49.874137 IP lga34s35-in-f10.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.51415: UDP, length 123
+18:06:49.881038 IP crc-dot1x-nat-10-239-17-28.bu.edu.51415 > lga34s35-in-f10.1e100.net.https: UDP, length 33
+18:06:49.925300 IP crc-dot1x-nat-10-239-17-28.bu.edu.48694 > dns05.bu.edu.domain: 2699+ A? history.google.com. (36)
+18:06:49.925813 IP crc-dot1x-nat-10-239-17-28.bu.edu.4774 > dns05.bu.edu.domain: 23661+ Type65? history.google.com. (36)
+18:06:49.928635 IP dns05.bu.edu.domain > crc-dot1x-nat-10-239-17-28.bu.edu.48694: 2699 7/0/0 CNAME history.l.google.com., A 142.251.163.139, A 142.251.163.138, A 142.251.163.101, A 142.251.163.102, A 142.251.163.113, A 142.251.163.100 (166)
+18:06:49.929096 IP dns05.bu.edu.domain > crc-dot1x-nat-10-239-17-28.bu.edu.4774: 23661 1/1/0 CNAME history.l.google.com. (120)
+18:06:49.931187 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 1250
+18:06:49.931196 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 74
+18:06:49.931333 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 567
+18:06:49.958923 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 1250
+18:06:49.958925 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 782
+18:06:49.958926 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 190
+18:06:49.958927 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 27
+18:06:49.958927 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 22
+18:06:49.959369 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 78
+18:06:49.959449 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 33
+18:06:49.959546 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 33
+18:06:49.982984 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 120
+18:06:49.998614 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 319
+18:06:49.998616 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 155
+18:06:49.998841 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 35
+18:06:50.024087 IP wv-in-f139.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.58118: UDP, length 28
+18:06:50.024338 IP crc-dot1x-nat-10-239-17-28.bu.edu.58118 > wv-in-f139.1e100.net.https: UDP, length 33
+18:06:50.029949 IP crc-dot1x-nat-10-239-17-28.bu.edu.57621 > 10.239.255.255.57621: UDP, length 44
+18:06:50.308847 IP lga25s78-in-f14.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.56865: UDP, length 37
+18:06:50.308850 IP lga25s78-in-f14.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.56865: UDP, length 36
+18:06:50.308852 IP lga25s78-in-f14.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.56865: UDP, length 260
+18:06:50.313454 IP crc-dot1x-nat-10-239-17-28.bu.edu.56865 > lga25s78-in-f14.1e100.net.https: UDP, length 33
+18:06:50.313734 IP crc-dot1x-nat-10-239-17-28.bu.edu.56865 > lga25s78-in-f14.1e100.net.https: UDP, length 430
+18:06:50.333795 IP lga25s78-in-f14.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.56865: UDP, length 36
+18:06:50.337311 IP crc-dot1x-nat-10-239-17-28.bu.edu.56865 > lga25s78-in-f14.1e100.net.https: UDP, length 33
+18:06:50.353741 IP lga25s78-in-f14.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.56865: UDP, length 112
+18:06:50.353994 IP crc-dot1x-nat-10-239-17-28.bu.edu.56865 > lga25s78-in-f14.1e100.net.https: UDP, length 39
+18:06:50.373986 IP lga25s78-in-f14.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.56865: UDP, length 30
+18:06:50.457190 IP crc-dot1x-nat-10-239-17-28.bu.edu > test.bu.edu: ICMP echo request, id 63763, seq 46717, length 64
+18:06:50.722379 IP crc-dot1x-nat-10-239-17-28.bu.edu.49538 > 17.248.202.3.https: Flags [P.], seq 436007581:436007620, ack 1369714231, win 2048, options [nop,nop,TS val 1840876033 ecr 2346394521], length 39
+18:06:50.723166 IP crc-dot1x-nat-10-239-17-28.bu.edu.49538 > 17.248.202.3.https: Flags [P.], seq 39:63, ack 1, win 2048, options [nop,nop,TS val 1840876033 ecr 2346394521], length 24
+18:06:50.723649 IP crc-dot1x-nat-10-239-17-28.bu.edu.49538 > 17.248.202.3.https: Flags [F.], seq 63, ack 1, win 2048, options [nop,nop,TS val 1840876034 ecr 2346394521], length 0
+18:06:50.733046 IP 17.248.202.3.https > crc-dot1x-nat-10-239-17-28.bu.edu.49538: Flags [.], ack 39, win 501, options [nop,nop,TS val 2346396147 ecr 1840876033], length 0
+18:06:50.733050 IP 17.248.202.3.https > crc-dot1x-nat-10-239-17-28.bu.edu.49538: Flags [.], ack 63, win 501, options [nop,nop,TS val 2346396147 ecr 1840876033], length 0
+18:06:50.733051 IP 17.248.202.3.https > crc-dot1x-nat-10-239-17-28.bu.edu.49538: Flags [.], ack 64, win 501, options [nop,nop,TS val 2346396147 ecr 1840876034], length 0
+18:06:50.733052 IP 17.248.202.3.https > crc-dot1x-nat-10-239-17-28.bu.edu.49538: Flags [F.], seq 1, ack 63, win 501, options [nop,nop,TS val 2346396147 ecr 1840876033], length 0
+18:06:50.733141 IP crc-dot1x-nat-10-239-17-28.bu.edu.49538 > 17.248.202.3.https: Flags [.], ack 2, win 2048, options [nop,nop,TS val 1840876042 ecr 2346396147], length 0
+18:06:51.461828 IP crc-dot1x-nat-10-239-17-28.bu.edu > test.bu.edu: ICMP echo request, id 63763, seq 46718, length 64
+18:06:51.609978 IP6 fe80::c4ef:8e22:fb40:30a9 > ff02::1: ICMP6, neighbor advertisement, tgt is fe80::c4ef:8e22:fb40:30a9, length 32
+18:06:51.717909 IP crc-dot1x-nat-10-239-17-28.bu.edu.49248 > 199.232.36.193.https: Flags [.], ack 1302693759, win 2048, length 0
+18:06:51.726077 IP 199.232.36.193.https > crc-dot1x-nat-10-239-17-28.bu.edu.49248: Flags [.], ack 1, win 287, options [nop,nop,TS val 2958571021 ecr 1840651565], length 0
+18:06:51.775593 IP6 fe80::ee14:a6f7:9a8f:15a7 > ff02::1: ICMP6, neighbor advertisement, tgt is fe80::ee14:a6f7:9a8f:15a7, length 32
+18:06:52.292423 IP crc-dot1x-nat-10-239-17-28.bu.edu.64394 > 43.224.186.35.bc.googleusercontent.com.https: Flags [P.], seq 2177867721:2177867764, ack 4123163095, win 2048, options [nop,nop,TS val 1840877596 ecr 2515992522], length 43
+18:06:52.321068 IP 43.224.186.35.bc.googleusercontent.com.https > crc-dot1x-nat-10-239-17-28.bu.edu.64394: Flags [.], ack 43, win 268, options [nop,nop,TS val 2516022552 ecr 1840877596], length 0
+18:06:52.333014 IP 43.224.186.35.bc.googleusercontent.com.https > crc-dot1x-nat-10-239-17-28.bu.edu.64394: Flags [P.], seq 1:41, ack 43, win 268, options [nop,nop,TS val 2516022564 ecr 1840877596], length 40
+18:06:52.333056 IP crc-dot1x-nat-10-239-17-28.bu.edu.64394 > 43.224.186.35.bc.googleusercontent.com.https: Flags [.], ack 41, win 2047, options [nop,nop,TS val 1840877635 ecr 2516022564], length 0
+18:06:52.430250 IP crc-dot1x-nat-10-239-17-28.bu.edu.63739 > lga25s79-in-f3.1e100.net.https: UDP, length 152
+18:06:52.430726 IP crc-dot1x-nat-10-239-17-28.bu.edu.63739 > lga25s79-in-f3.1e100.net.https: UDP, length 153
+18:06:52.448670 IP lga25s79-in-f3.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.63739: UDP, length 35
+18:06:52.448673 IP lga25s79-in-f3.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.63739: UDP, length 35
+18:06:52.457134 IP crc-dot1x-nat-10-239-17-28.bu.edu.63739 > lga25s79-in-f3.1e100.net.https: UDP, length 33
+18:06:52.466460 IP crc-dot1x-nat-10-239-17-28.bu.edu > test.bu.edu: ICMP echo request, id 63763, seq 46719, length 64
+18:06:52.467788 IP lga25s79-in-f3.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.63739: UDP, length 166
+18:06:52.467791 IP lga25s79-in-f3.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.63739: UDP, length 24
+18:06:52.467792 IP lga25s79-in-f3.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.63739: UDP, length 113
+18:06:52.468025 IP lga25s79-in-f3.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.63739: UDP, length 24
+18:06:52.468091 IP crc-dot1x-nat-10-239-17-28.bu.edu.63739 > lga25s79-in-f3.1e100.net.https: UDP, length 39
+18:06:52.468278 IP crc-dot1x-nat-10-239-17-28.bu.edu.63739 > lga25s79-in-f3.1e100.net.https: UDP, length 39
+18:06:52.473259 IP crc-dot1x-nat-10-239-17-28.bu.edu.63739 > lga25s79-in-f3.1e100.net.https: UDP, length 33
+18:06:52.490461 IP lga25s79-in-f3.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.63739: UDP, length 28
+18:06:52.960893 IP crc-dot1x-nat-10-239-17-28.bu.edu.49385 > lga25s71-in-f1.1e100.net.https: Flags [.], ack 1193131386, win 2048, length 0
+18:06:52.960916 IP crc-dot1x-nat-10-239-17-28.bu.edu.49237 > 151.101.65.69.https: Flags [.], ack 3468583089, win 2048, length 0
+18:06:52.972771 IP 151.101.65.69.https > crc-dot1x-nat-10-239-17-28.bu.edu.49237: Flags [.], ack 1, win 333, options [nop,nop,TS val 2420223091 ecr 1840651972], length 0
+18:06:52.981798 IP lga25s71-in-f1.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.49385: Flags [.], ack 1, win 265, options [nop,nop,TS val 2249842152 ecr 1840651962], length 0
+18:06:53.471161 IP crc-dot1x-nat-10-239-17-28.bu.edu > test.bu.edu: ICMP echo request, id 63763, seq 46720, length 64
+18:06:53.479467 IP lga34s35-in-f10.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.54499: UDP, length 81
+18:06:53.489923 IP crc-dot1x-nat-10-239-17-28.bu.edu.54499 > lga34s35-in-f10.1e100.net.https: UDP, length 33
+18:06:53.494384 IP lga34s35-in-f10.1e100.net.https > crc-dot1x-nat-10-239-17-28.bu.edu.54499: UDP, length 81
+18:06:53.494610 IP crc-dot1x-nat-10-239-17-28.bu.edu.54499 > lga34s35-in-f10.1e100.net.https: UDP, length 34
