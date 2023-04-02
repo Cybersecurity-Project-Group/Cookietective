@@ -53,7 +53,7 @@ def parseDNS(packet):
         # Append DNSRR information to global list if has CNAME entry
         if (has_CNAME):
             listCNAMES.append(CNAME_packet(dns.an[CNAME_index], has_Atype))
-            print(ip)
+            # print(ip)
                     
 
 
@@ -86,14 +86,17 @@ scapy.load_layer("tls")
 
 # Listens to traffic for DNS traffic (udp port 53) for 5 seconds then prints summary
 # OR listens to HTTP traffic (port 80 / 443) to search for HTTP packets with cookies
-scapy.sniff(filter="udp port 53", timeout=15, prn=parseDNS)
+# scapy.sniff(filter="udp port 53", timeout=15, prn=parseDNS)
 # scapy.sniff(filter="port 80 or port 443", timeout=400, prn=parseHTTP)
 # scapy.sniff(iface="WiFi 2", store=False, prn=process_packets)
+
+for packet in scapy.PcapReader('test.pcap'):
+    parseDNS(packet)
 
 # Iterate through all CNAME packets and list their name, alias pair
 for i, packet in enumerate(listCNAMES):
     print("CNAME Packet", i, ": Domain:", packet.domain, "CNAME Alias:", packet.cname, "Has A-type", packet.has_A)
-    
+
 # Notes:
 # CNAME packets (with no A-type packet) do NOT contain IP address
 # Megele paper says that (name,value) = (name looked up, name it's seen as)
