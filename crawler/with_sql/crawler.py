@@ -4,6 +4,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import logging
 import time
+import sqlite3
 
 # set up request interval
 sleepTime = 1
@@ -23,19 +24,30 @@ opts.add_argument("--incognito")
 chromeExecutable = webdriver.chrome.service.Service(executable_path=PATH)
 driver = webdriver.Chrome(service=chromeExecutable, options=opts)
 
-# set up set to keep track of scraped URLs
-scrapedUrls = set()
+# connect to SQLite database
+conn = sqlite3.connect("scraped_urls.db")
+cursor = conn.cursor()
+
+# create table for scraped urls
+cursor.execute(
+    "CREATE TABLE IF NOT EXISTS scraped_urls (url TEXT PRIMARY KEY)"
+)
+conn.commit()
 
 def scrape_links(url):
 
-    # recursively scrape links found on a web page -- skip URL if already scraped
-    if url in scrapedUrls:
+    # check URL if already scraped
+    cursor.execute("SELECT * FROM scraped_urls WHERE url = ?", (url,))
+    if cursor.fetchone():
         logging.info("Skipping: %s", url)
-        return
-
-    logging.info("Scraping: %s", url)
-    scrapedUrls.add(url)
+        return 
     
+    logging.info("Scraping: %s", url)
+
+    # add URL to scraped_urls table
+    cursor.execute("INSERT INTO scraped_urls VALUES (?)", (url,))
+    conn.commit()
+
     # send request to URL
     driver.get(url)
 
