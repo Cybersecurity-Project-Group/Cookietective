@@ -1,18 +1,12 @@
 # USAGE: mitmproxy -s path/to/http_manipulate_cookies.py
+# In order to run the mitmproxy on own machine, need to go to network settings and set Proxies on for 
+# http and https into localhost:8080
 from mitmproxy import http
 from typing import List, Dict
 import json
 
 
 # -- Helper functions --
-def load_json_cookies():
-    """
-    Load a particular json file containing a list of cookies.
-    """
-    with open(PATH_TO_COOKIES, "r") as f:
-        return json.load(f)
-# NOTE: or just hardcode the cookies as [{"name": "", "value": ""}]
-
 
 def stringify_cookies(cookies: List[Dict]) -> str:
     """
@@ -33,11 +27,6 @@ def parse_cookies(cookie_string: str) -> List[Dict[str, str]]:
             cookies.append({"name": k, "value": v})
     return cookies
 
-PATH_TO_COOKIES = "./cookies.json"  # insert your path to the cookie file here
-FILTER_COOKIES = {"userdata", "_ga"}  # update this to the specific cookie names you want to remove
-# NOTE: we use a set for lookup efficiency
-
-# -- Main interception functionality --
 
 def request(flow: http.HTTPFlow) -> None:
     cookie_dict = {}

@@ -16,15 +16,12 @@ listCNAMES = []
 # Megele paper says that (name,value) = (name looked up, name it's seen as)
 
 class CNAME_packet():
-    def __init__(self, packet, A):
+    def __init__(self, packet, A, ip):
         self.packet = packet
         self.has_A = A
         self.domain = packet.rrname
         self.cname = packet.rdata
-        # if (self.has_A):
-        #     self.ip = packet.ip
-        # else:
-        #     self.ip = None
+        self.ip = ip
         
 
 # Function to be run everytime sniffer encounters a DNS packet
@@ -57,7 +54,7 @@ def parseDNS(packet):
         
         # Append DNSRR information to global list if has CNAME entry
         if (has_CNAME):
-            listCNAMES.append(CNAME_packet(dns.an[CNAME_index], has_Atype))
+            listCNAMES.append(CNAME_packet(dns.an[CNAME_index], has_Atype, ip))
             # print(ip)
                     
 
@@ -103,6 +100,6 @@ def get_CNAME_packets():
 
     # Iterate through all CNAME packets and list their name, alias pair
     for i, packet in enumerate(listCNAMES):
-        print("CNAME Packet", i, ": Domain:", packet.domain, "CNAME Alias:", packet.cname, "Has A-type", packet.has_A)
+        print("CNAME Packet", i, ": Domain:", packet.domain, "CNAME Alias:", packet.cname, "Has A-type:", packet.has_A, "IP addresses:", packet.ip)
 
 get_CNAME_packets()
