@@ -5,7 +5,7 @@ cur = conn.cursor()
 
 # Initialize the table
 cur.execute("""CREATE TABLE packets (
-    website text,
+    url text,
     IP blob,
     vulnerability text
     )""")
