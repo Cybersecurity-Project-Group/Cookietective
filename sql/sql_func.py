@@ -14,11 +14,11 @@ cur.execute("""CREATE TABLE CNAMEpackets (
 '''
 
 def insertCNAMEpacketsEntry(domainName, sourceAddress, CNAMEAlias, hasAType):
-    cur.execute("INSERT INTO packets VALUES (?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType))
+    cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType))
     return
 
-def fetchEntryWebsite(website):
-    cur.execute("SELECT * FROM packets WHERE website = ?", (website,))
+def fetchDomainFromAlias(CNAMEAlias):
+    cur.execute("SELECT domainName FROM CNAMEpackets WHERE CNAMEAlias = ?", (CNAMEAlias,))
     result = cur.fetchall()
     print(result)
     return result
