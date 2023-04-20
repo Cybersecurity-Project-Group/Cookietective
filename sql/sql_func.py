@@ -1,10 +1,20 @@
 import sqlite3
 
-conn = sqlite3.connect('savedpackets.db')
+conn = sqlite3.connect('database.db')
 cur = conn.cursor()
 
-def addEntry(website, ip, vulnerability):
-    cur.execute("INSERT INTO packets VALUES (?, ?, ?)", (website, ip, vulnerability))
+
+''' The table has the following columns
+cur.execute("""CREATE TABLE CNAMEpackets (
+    domainName text,
+    sourceAddress text,
+    CNAMEAlias text,
+    hasAType int
+    )""")
+'''
+
+def insertCNAMEpacketsEntry(domainName, sourceAddress, CNAMEAlias, hasAType):
+    cur.execute("INSERT INTO packets VALUES (?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType))
     return
 
 def fetchEntryWebsite(website):
