@@ -23,7 +23,16 @@ def insertCookieEntry(domainName, src_ip, domain_setting, httponly, secure):
 def fetchDomainFromAlias(CNAMEAlias):
     cur.execute("SELECT domainName FROM CNAMEpackets WHERE CNAMEAlias = ?", (CNAMEAlias,))
     result = cur.fetchall()
-    print(result)
+    return result
+
+def fetchIpFromDomain(domainName):
+    cur.execute("SELECT ip FROM ip WHERE domainName = ?", (domainName,))
+    result = cur.fetchall()
+    return result
+
+def fetchATypeRecordsFromDomain(domainName):
+    cur.execute("SELECT hasAType FROM CNAMEpackets WHERE domainName = ?", (domainName,))
+    result = cur.fetchall()
     return result
 
 
