@@ -4,10 +4,11 @@ conn = sqlite3.connect('savedpackets.db')
 cur = conn.cursor()
 
 # Initialize the table
-cur.execute("""CREATE TABLE packets (
-    url text,
-    IP blob,
-    vulnerability text
+cur.execute("""CREATE TABLE CNAMEpackets (
+    domainName text,
+    sourceAddress text,
+    CNAMEAlias text,
+    hasAType int
     )""")
 
 conn.commit()
