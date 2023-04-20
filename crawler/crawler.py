@@ -2,15 +2,26 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urllib.request import urlopen
+import sys
 import logging
 import time
 import sqlite3
 
-# set up request interval
-sleepTime = 1
-
 # set up logging config
 logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
+
+# manage command-line args
+file = open(sys.argv[1])
+urls = file.readlines()
+
+url_start_index = 1 #int(sys.argv[2])
+url_end_index = 3 #int(sys.argv[3]) + 1
+
+url_list = urls[int(url_start_index): int(url_end_index)]
+
+# set up request interval
+sleepTime = 1
 
 # provide path to browser driver
 PATH = "chromedriver"
@@ -74,8 +85,8 @@ def scrape_links(url):
 
 
 # prompt user for initial URL to scrape
-url = input("Enter URL to scrape: ")
-scrape_links(url)
+for i in range(url_start_index, url_end_index):
+    scrape_links("https://" + urls[i])
 
 # terminate browser
 driver.quit()
