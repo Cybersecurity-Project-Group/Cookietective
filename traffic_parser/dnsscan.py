@@ -1,4 +1,5 @@
 import scapy.all as scapy
+import sql.sql_func as sql
 
 listCNAMES = []
 
@@ -26,6 +27,8 @@ def parseDNS(packet):
 
         has_CNAME = False
         has_Atype = False
+        src_ip = packet['IP'].src
+        
         CNAME_index = 0
         ip = []
 
@@ -36,7 +39,7 @@ def parseDNS(packet):
                 dnsrr = dns.an[i]
                 type_field = dnsrr.get_field('type')
 
-                # If DNS entry is of type CNAME, store it in listCNAMES
+                # If DNS entry is of type CNAME, store it in listCNAMES (There can only be 1 CNAME entry per packet)
                 if (type_field.i2repr(dnsrr, dnsrr.type) == 'CNAME'):
                     CNAME_index = i
                     has_CNAME = True
@@ -45,9 +48,18 @@ def parseDNS(packet):
                     has_Atype = True
                     ip.append(dnsrr.rdata)
         
-        # Append DNSRR information to global list if has CNAME entry
+        # Insert CNAME packet information into SQLite database
         if (has_CNAME):
-            listCNAMES.append(CNAME_packet(dns.an[CNAME_index], has_Atype, ip))
+            domain = dns.an[CNAME_index].rrname
+            alias = dns.an[CNAME_index].rdata
+
+            # Insert into SQLite database
+            sql.insertCNAMEpacketsEntry(domain, src_ip, alias, has_Atype)
+
+            # Iterate through all of the stored ip addresses from A-type records and insert into SQLite if there are any
+            for addr in ip:
+                if addr is not None:
+                    sql.insertIpEntry(domain, addr)
             
 # Main function that executes the DNSscanner
 def main():
