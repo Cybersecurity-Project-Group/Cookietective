@@ -4,6 +4,7 @@ listCNAMES = []
 
 # TO DO: 
 # - 
+# - 
 
 class CNAME_packet():
     def __init__(self, packet, A, ip):
@@ -82,10 +83,17 @@ scapy.load_layer("tls")
 
     # Listens to traffic for DNS traffic (udp port 53) for 15 seconds then prints summary
     scapy.sniff(filter="udp port 53", timeout=15, prn=parseDNS)
+    # Listens to traffic for DNS traffic (udp port 53) for 15 seconds then prints summary
+    scapy.sniff(filter="udp port 53", timeout=15, prn=parseDNS)
 
     # for packet in scapy.PcapReader('test.pcap'):
     #     parseDNS(packet)
+    # for packet in scapy.PcapReader('test.pcap'):
+    #     parseDNS(packet)
 
+    # # Iterate through all CNAME packets and list their name, alias pair
+    # for i, packet in enumerate(listCNAMES):
+    #     print("CNAME Packet", i, ": Domain:", packet.domain, "CNAME Alias:", packet.cname, "Has A-type", packet.has_A)
     # # Iterate through all CNAME packets and list their name, alias pair
     # for i, packet in enumerate(listCNAMES):
     #     print("CNAME Packet", i, ": Domain:", packet.domain, "CNAME Alias:", packet.cname, "Has A-type", packet.has_A)
