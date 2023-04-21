@@ -2,12 +2,12 @@
 
 # Set up the network settings based on the operating system
 # Install the mitmproxy certificate
-openssl x509 -in mitmproxy-ca-cert.pem -out mitmproxy-ca-cert.crt
+openssl x509 -in ~/.mitmproxy/mitmproxy-ca-cert.pem -out mitmproxy-ca-cert.crt
 
 # Install certificate and set up proxies for Mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # Add in the mitmproxy certificate
-    sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain mitmproxy-ca-cert.pem
+    sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain mitmproxy-ca-cert.crt
     
     networksetup -setwebproxy "Wi-Fi" localhost 8080
     networksetup -setsecurewebproxy "Wi-Fi" localhost 8080
