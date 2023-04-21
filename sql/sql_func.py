@@ -4,6 +4,18 @@ import sqlite3
 def insertCNAMEpacketsEntry(domainName, sourceAddress, CNAMEAlias, hasAType):
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
+    cur.execute("SELECT * FROM CNAMEpackets WHERE domainName = ? AND sourceAddress = ? AND CNAMEAlias = ?", (domainName, sourceAddress, CNAMEAlias))
+    result = cur.fetchone()
+    
+    # Check if a result of the same values already exists. If new result is same except for Atype, just update old value
+    if (result):
+        if (result[3] == 0 and hasAType == 1):
+            cur.execute("UPDATE CNAMEpackets set hasAType = 1 WHERE domainName = ? AND sourceAddress = ? AND CNAMEAlias = ?", (domainName, sourceAddress, CNAMEAlias))
+            conn.commit()
+        conn.close()
+        return
+
+    # Insert into the database
     cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType))
     conn.commit()
     conn.close()
@@ -40,11 +52,15 @@ def fetchDomainFromAlias(CNAMEAlias):
     return result
 
 def fetchIpFromDomain(domainName):
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
     cur.execute("SELECT ip FROM ip WHERE domainName = ?", (domainName,))
     result = cur.fetchall()
     return result
 
 def fetchATypeRecordsFromDomain(domainName):
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
     cur.execute("SELECT hasAType FROM CNAMEpackets WHERE domainName = ?", (domainName,))
     result = cur.fetchall()
 
