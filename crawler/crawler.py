@@ -73,7 +73,7 @@ def scrape_links(url):
 
 # prompt user for initial URL to scrape
 for i in range(url_start_index, url_end_index):
-    scrape_links("https://" + urls[i])
+    scrape_links("http://" + urls[i])
 
 # terminate browser
 driver.quit()
