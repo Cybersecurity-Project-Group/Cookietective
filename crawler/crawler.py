@@ -18,8 +18,6 @@ urls = file.readlines()
 url_start_index = int(sys.argv[2])
 url_end_index = int(sys.argv[3])
 
-url_list = urls[int(url_start_index): int(url_end_index)]
-
 # set up request interval
 sleepTime = 1
 
