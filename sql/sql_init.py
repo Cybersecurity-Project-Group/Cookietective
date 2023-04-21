@@ -13,13 +13,13 @@ cur.execute("""CREATE TABLE CNAMEpackets (
 
 # Initialize the IP table that stores IP packets associated with A-type packets
 cur.execute("""CREATE TABLE ip (
-    domainName text PRIMARY KEY NOT NULL,
+    domainName text NOT NULL,
     ip text NOT NULL
     )""")
 
 # Initialize the cookie table that stores Set-Cookie information from MITMproxy
 cur.execute("""CREATE TABLE cookie (
-    domainName text PRIMARY KEY NOT NULL,
+    domainName text NOT NULL,
     src_ip text NOT NULL,
     domain_setting text NOT NULL,
     httponly int,
