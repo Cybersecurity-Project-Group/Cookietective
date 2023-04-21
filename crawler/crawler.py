@@ -2,11 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from urllib.request import urlopen
 import sys
 import logging
 import time
-import sqlite3
 
 # set up logging config
 logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
@@ -15,10 +13,8 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(m
 file = open(sys.argv[1])
 urls = file.readlines()
 
-url_start_index = 1 #int(sys.argv[2])
-url_end_index = 3 #int(sys.argv[3]) + 1
-
-url_list = urls[int(url_start_index): int(url_end_index)]
+url_start_index = int(sys.argv[2])
+url_end_index = int(sys.argv[3])
 
 # set up request interval
 sleepTime = 1
@@ -35,29 +31,20 @@ opts.add_argument("--incognito")
 chromeExecutable = webdriver.chrome.service.Service(executable_path=PATH)
 driver = webdriver.Chrome(service=chromeExecutable, options=opts)
 
-# connect to SQLite database
-conn = sqlite3.connect("scraped_urls.db")
-cursor = conn.cursor()
-
-# create table for scraped urls
-cursor.execute(
-    "CREATE TABLE IF NOT EXISTS scraped_urls (url TEXT PRIMARY KEY)"
-)
-conn.commit()
+# set of scraped links
+scraped = set()
 
 def scrape_links(url):
 
     # check URL if already scraped
-    cursor.execute("SELECT * FROM scraped_urls WHERE url = ?", (url,))
-    if cursor.fetchone():
+    if url in scraped:
         logging.info("Skipping: %s", url)
         return 
     
     logging.info("Scraping: %s", url)
 
-    # add URL to scraped_urls table
-    cursor.execute("INSERT INTO scraped_urls VALUES (?)", (url,))
-    conn.commit()
+    # add scraped url to set
+    scraped.add(url)
 
     # send request to URL
     driver.get(url)
@@ -86,7 +73,7 @@ def scrape_links(url):
 
 # prompt user for initial URL to scrape
 for i in range(url_start_index, url_end_index):
-    scrape_links("https://" + urls[i])
+    scrape_links("http://" + urls[i])
 
 # terminate browser
 driver.quit()

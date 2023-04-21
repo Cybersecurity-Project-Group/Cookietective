@@ -2,14 +2,24 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urllib.request import urlopen
+import sys
 import logging
 import time
-
-# set up request interval
-sleepTime = 1
+import sqlite3
 
 # set up logging config
 logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
+
+# manage command-line args
+file = open(sys.argv[1])
+urls = file.readlines()
+
+url_start_index = int(sys.argv[2])
+url_end_index = int(sys.argv[3])
+
+# set up request interval
+sleepTime = 1
 
 # provide path to browser driver
 PATH = "chromedriver"
@@ -23,19 +33,30 @@ opts.add_argument("--incognito")
 chromeExecutable = webdriver.chrome.service.Service(executable_path=PATH)
 driver = webdriver.Chrome(service=chromeExecutable, options=opts)
 
-# set up set to keep track of scraped URLs
-scrapedUrls = set()
+# connect to SQLite database
+conn = sqlite3.connect("scraped_urls.db")
+cursor = conn.cursor()
+
+# create table for scraped urls
+cursor.execute(
+    "CREATE TABLE IF NOT EXISTS scraped_urls (url TEXT PRIMARY KEY)"
+)
+conn.commit()
 
 def scrape_links(url):
 
-    # recursively scrape links found on a web page -- skip URL if already scraped
-    if url in scrapedUrls:
+    # check URL if already scraped
+    cursor.execute("SELECT * FROM scraped_urls WHERE url = ?", (url,))
+    if cursor.fetchone():
         logging.info("Skipping: %s", url)
-        return
-
-    logging.info("Scraping: %s", url)
-    scrapedUrls.add(url)
+        return 
     
+    logging.info("Scraping: %s", url)
+
+    # add URL to scraped_urls table
+    cursor.execute("INSERT INTO scraped_urls VALUES (?)", (url,))
+    conn.commit()
+
     # send request to URL
     driver.get(url)
 
@@ -62,8 +83,8 @@ def scrape_links(url):
 
 
 # prompt user for initial URL to scrape
-url = input("Enter URL to scrape: ")
-scrape_links(url)
+for i in range(url_start_index, url_end_index):
+    scrape_links("https://" + urls[i])
 
 # terminate browser
 driver.quit()
