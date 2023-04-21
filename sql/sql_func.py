@@ -34,8 +34,18 @@ def fetchDomainFromAlias(CNAMEAlias):
     cur = conn.cursor()
     cur.execute("SELECT domainName FROM CNAMEpackets WHERE CNAMEAlias = ?", (CNAMEAlias,))
     result = cur.fetchall()
-    print(result)
-    
+
     conn.commit()
     conn.close()
+    return result
+
+def fetchIpFromDomain(domainName):
+    cur.execute("SELECT ip FROM ip WHERE domainName = ?", (domainName,))
+    result = cur.fetchall()
+    return result
+
+def fetchATypeRecordsFromDomain(domainName):
+    cur.execute("SELECT hasAType FROM CNAMEpackets WHERE domainName = ?", (domainName,))
+    result = cur.fetchall()
+
     return result
