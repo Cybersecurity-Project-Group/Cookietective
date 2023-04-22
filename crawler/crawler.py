@@ -19,8 +19,8 @@ url_end_index = int(sys.argv[3])
 # set up request interval
 sleepTime = 1
 
-# provide path to browser driver
-PATH = "chromedriver"
+# # provide path to browser driver
+# PATH = "chromedriver"
 
 # set up options for browser
 opts = webdriver.ChromeOptions()
@@ -29,7 +29,7 @@ opts.add_argument("--incognito")
 opts.add_argument("--headless")
 
 # initiate browser driver
-chromeExecutable = webdriver.chrome.service.Service(executable_path=PATH)
+chromeExecutable = webdriver.chrome.service.Service()
 driver = webdriver.Chrome(service=chromeExecutable, options=opts)
 
 # set of scraped links
