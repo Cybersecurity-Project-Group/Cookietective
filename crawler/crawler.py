@@ -26,6 +26,7 @@ PATH = "chromedriver"
 opts = webdriver.ChromeOptions()
 opts.add_experimental_option("detach", True)
 opts.add_argument("--incognito")
+opts.add_argument("--headless")
 
 # initiate browser driver
 chromeExecutable = webdriver.chrome.service.Service(executable_path=PATH)
