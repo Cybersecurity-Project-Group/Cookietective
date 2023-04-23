@@ -27,6 +27,7 @@ sleepTime = 1
 opts = webdriver.FirefoxOptions()
 opts.add_argument("--private")
 opts.add_argument("--headless")
+opts.set_preference('javascript.enabled', False)
 
 # # initiate browser driver
 # firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
@@ -39,7 +40,7 @@ def scrape_links(url):
 
     # check URL if already scraped
     if url in scraped:
-        logging.info("Skipping: %s", url)
+        logging.debug("Skipping")
         return 
     
     logging.info("Scraping: %s", url)
@@ -69,7 +70,7 @@ def scrape_links(url):
         logging.debug("Error scraping %s: %s", url, e)
         return
 
-    finally:
+    else:
         logging.debug("Done scraping: %s", url)
 
 
@@ -79,4 +80,4 @@ for i in range(url_start_index, url_end_index):
 
 # terminate browser
 driver.quit()
-logging.info("done")
+logging.info(f"counter: {len(scraped)}")
