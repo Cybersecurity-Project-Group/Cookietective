@@ -8,6 +8,7 @@ import time
 
 # set up logging config
 logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
+logging.info("start")
 
 # manage command-line args
 file = open(sys.argv[1])
@@ -19,17 +20,17 @@ url_end_index = int(sys.argv[3])
 # set up request interval
 sleepTime = 1
 
-# provide path to browser driver
-PATH = "chromedriver"
+# # provide path to browser driver
+# PATH = "geckodriver"
 
 # set up options for browser
-opts = webdriver.ChromeOptions()
-opts.add_experimental_option("detach", True)
-opts.add_argument("--incognito")
+opts = webdriver.FirefoxOptions()
+opts.add_argument("--private")
+opts.add_argument("--headless")
 
-# initiate browser driver
-chromeExecutable = webdriver.chrome.service.Service(executable_path=PATH)
-driver = webdriver.Chrome(service=chromeExecutable, options=opts)
+# # initiate browser driver
+# firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
+driver = webdriver.Firefox(options=opts)
 
 # set of scraped links
 scraped = set()
@@ -66,6 +67,7 @@ def scrape_links(url):
     except Exception as e:
         # log error and continue scraping
         logging.debug("Error scraping %s: %s", url, e)
+        return
 
     finally:
         logging.debug("Done scraping: %s", url)
@@ -77,3 +79,4 @@ for i in range(url_start_index, url_end_index):
 
 # terminate browser
 driver.quit()
+logging.info("done")
