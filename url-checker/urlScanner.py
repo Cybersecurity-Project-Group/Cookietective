@@ -67,14 +67,12 @@ def mostMatching(url1, url2): # returns number of matching domains, array of wha
             matchCount = matchCount + 1
             matches.append(url1Array[i])
 
-
-    print(matchCount)
-    print(matches)
     return matchCount, matches
 
-''' Test Code
+# Test Code
 str1 = "www.hilton.hotels.com/search"
 str2 = "www.laquinta.hotels.com"
+
 common_part = urlComp(str1, str2)
 for element in common_part:
     print(element)
@@ -83,4 +81,4 @@ longestCharacters = longestStr(str1, str2)
 print(longestCharacters)
 
 domainMatches = mostMatching(str1, str2)
-'''
+print(domainMatches)

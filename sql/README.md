@@ -2,10 +2,22 @@
 The SQL for this project is done using SQLLite, which is in the standard library. The files in this folder are as follows:
 
 ## sql_init
-sql_init will initialize the SQL table called 'packets' with the following columns:
-    website - holds tbe URL of the website
-    ip - holds the ip address associated with the website
-    vulnerability - holds the name of the vulnerability found
+sql_init will initialize the SQL tables for the project as follows:
+    
+**CNAMEpackets**\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domainName\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sourceAddress\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CNAMEAlias\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hasAType\
+**ip**\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domainName\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip\
+**cookie**\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domainName\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;src_ip text\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domain_setting\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;httponly\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;secure
 
 This should be run once if the table does not exist in the directory in order to create the table.
 
@@ -14,16 +26,6 @@ This file adds a variety of functions that can be used to help access the SQL da
 another module in the main directory, place the following in the header:
 
 ```
-import sys
-sys.path.append('sql')
-
-import sql_func
-
-from my_module import my_function
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import sql.sql_func as sql
 ```
-
-#### addEntry(website, ip, vulnerability)
-This function will add an entry to the sql table with the values specified in the arguments.
-
-#### fetchEntryWebsite(website)
-This function will print the entries from the database that match the website given.

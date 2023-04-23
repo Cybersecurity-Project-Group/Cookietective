@@ -21,16 +21,19 @@ url_end_index = int(sys.argv[3])
 sleepTime = 1
 
 # # provide path to browser driver
-# PATH = "geckodriver"
+# PATH = "chromedriver"
 
 # set up options for browser
-opts = webdriver.FirefoxOptions()
-opts.add_argument("--private")
+opts = webdriver.ChromeOptions()
+opts.add_experimental_option("detach", True)
+opts.add_argument("--incognito")
 opts.add_argument("--headless")
 
 # # initiate browser driver
-# firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
-driver = webdriver.Firefox(options=opts)
+# chromeExecutable = webdriver.chrome.service.Service(executable_path=PATH)
+# driver = webdriver.Chrome(service=chromeExecutable, options=opts)
+
+driver = webdriver.Chrome(options=opts)
 
 # set of scraped links
 scraped = set()
@@ -79,4 +82,5 @@ for i in range(url_start_index, url_end_index):
 
 # terminate browser
 driver.quit()
+
 logging.info("done")
