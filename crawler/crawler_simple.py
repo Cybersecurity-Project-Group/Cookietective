@@ -56,7 +56,6 @@ def scrape_links(url):
                 seen.add(href)
     except:
         logging.warning(f"error locating {href}")
-    
 
 
 # prompt user for initial URL to scrape

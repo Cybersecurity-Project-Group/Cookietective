@@ -43,9 +43,9 @@ def scrape_links(url):
         logging.debug("Skipping")
         return 
     
-    logging.info("Scraping: %s", url)
+    logging.info(f"Scanning: {url}")
 
-    # add scraped url to set
+    # add scanned url to set
     scraped.add(url)
 
     # send request to URL
@@ -67,14 +67,13 @@ def scrape_links(url):
                 
     except Exception as e:
         # log error and continue scraping
-        logging.debug("Error scraping %s: %s", url, e)
+        logging.debug(f"Error scraping {url}: {e}")
         return
 
     else:
-        logging.debug("Done scraping: %s", url)
+        logging.debug(f"Done scanning: {url}")
 
-
-# prompt user for initial URL to scrape
+# iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
     scrape_links("http://" + urls[i])
 
