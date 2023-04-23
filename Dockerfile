@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENTRYPOINT [ "python3", "crawler/crawler.py"]
-CMD ["sample_urls.txt", "0", "3" ]
+CMD ["sample_urls.txt", "0", "3"]
