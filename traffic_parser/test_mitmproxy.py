@@ -29,11 +29,19 @@ def response(flow: http.HTTPFlow) -> None:
                             Secure = True
                         if (cookie == " HttpOnly"):
                             httpOnly = True
-                        if (cookie[:7] == " domain="):
+                        if ("domain=" in cookie):
                             domain = cookie[8:]
                 
                 f.write("### Cookie ###\n\n")
-                f.write() 
+                f.write(set_cookie_header)
+                f.write("\n\n") 
+                f.write("Secure:" + str(Secure))
+                f.write("\n") 
+                f.write("HttpOnly:" + str(httpOnly))
+                f.write("\n") 
+                f.write("Domain:" + str(domain))
+                f.write("\n") 
+                f.write("\n\n\n") 
 
 
 
