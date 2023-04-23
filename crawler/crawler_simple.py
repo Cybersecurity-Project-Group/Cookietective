@@ -33,22 +33,11 @@ opts.set_preference('javascript.enabled', False)
 # firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
 driver = webdriver.Firefox(options=opts)
 
-# set of scraped links
-scraped = set()
+# set of links
+seen = set()
 
 def scrape_links(url):
 
-    # check URL if already scraped
-    if url in scraped:
-        logging.debug("Skipping")
-        return 
-    
-    logging.info(f"Scanning: {url}")
-
-    # add scanned url to set
-    scraped.add(url)
-
-    # send request to URL
     driver.get(url)
 
     try:
@@ -62,21 +51,21 @@ def scrape_links(url):
         for link in links:
             # obtain links
             href = link.get_attribute("href")
-            if href and href.startswith("http"):
-                scrape_links(href)
-                
-    except Exception as e:
-        # log error and continue scraping
-        logging.debug(f"Error scraping {url}: {e}")
-        return
+            if href:
+                #print(href)
+                seen.add(href)
+    except:
+        logging.warning(f"error locating {href}")
 
-    else:
-        logging.debug(f"Done scanning: {url}")
 
-# iterate thorugh list of URLs to scrape
+# prompt user for initial URL to scrape
 for i in range(url_start_index, url_end_index):
     scrape_links("http://" + urls[i])
 
+for i in seen:
+    driver.get(i)
+    logging.info(i)
+
 # terminate browser
 driver.quit()
-logging.info(f"counter: {len(scraped)}")
+logging.info("done")
