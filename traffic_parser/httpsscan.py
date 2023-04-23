@@ -20,7 +20,7 @@ class Addon(object):
 
             # Get the source domain and IP address
             src_domain = flow.request.pretty_host
-            src_ip = flow.server_conn.ip_address[0]
+            src_ip = flow.server_conn.peername[0]
             # Parse through each Set-Cookie header found in the HTTPS packet
             for set_cookie_header in set_cookie_headers:
                 cookies = set_cookie_header.split(";")
