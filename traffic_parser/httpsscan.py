@@ -57,10 +57,21 @@ async def run_proxy(port):
     except asyncio.TimeoutError:
         m.shutdown()
 
+# Function that runs the proxy with the command line-specified port
+def run():
 
-loop = asyncio.get_event_loop()
-try:
-    loop.run_until_complete(run_proxy(8080))
-finally:
-    loop.close()
-    
+    # Error checking if a port was given
+    if (len(sys.argv) < 2):
+        print("Error: No port specified")
+        exit(0)
+
+    port = int(sys.argv[1])
+
+    # Run the function asynchronously
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(run_proxy(port))
+    finally:
+        loop.close()
+
+run()
