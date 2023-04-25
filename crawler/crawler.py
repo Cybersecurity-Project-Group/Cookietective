@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import sys
 import logging
 import time
+import datetime
 
 # set up logging config
 logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
@@ -17,8 +18,8 @@ urls = file.readlines()
 url_start_index = int(sys.argv[2])
 url_end_index = int(sys.argv[3])
 
-# set up request interval
-sleepTime = 1
+# set up scan time
+scan_time = 30
 
 # # provide path to browser driver
 # PATH = "geckodriver"
@@ -36,11 +37,13 @@ driver = webdriver.Firefox(options=opts)
 # set of scraped links
 scraped = set()
 
-def scrape_links(url):
-
+def scrape_links(url, current_time, stop_time):
+    # check timer
+    if current_time >= stop_time:
+        return
     # check URL if already scraped
     if url in scraped:
-        logging.debug("Skipping")
+        logging.debug(f"Skipping {url}")
         return 
     
     logging.info(f"Scanning: {url}")
@@ -63,7 +66,7 @@ def scrape_links(url):
             # obtain links
             href = link.get_attribute("href")
             if href and href.startswith("http"):
-                scrape_links(href)
+                scrape_links(href, datetime.datetime.now(), stop_time)
                 
     except Exception as e:
         # log error and continue scraping
@@ -72,10 +75,26 @@ def scrape_links(url):
 
     else:
         logging.debug(f"Done scanning: {url}")
+    logging.debug("returning")
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
-    scrape_links("http://" + urls[i])
+    print(f"start time for {urls[i]}: {datetime.datetime.now()}")
+    link = "http://" + urls[i]
+    scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
+    print(f"end time for {urls[i]}: {datetime.datetime.now()}")
+    # process = multiprocessing.Process(target=scrape_links, name="Scan", args=(link,))
+    
+    # print (urls[i])
+
+    # # Wait 15 seconds for scan
+    # time.sleep(scanTime)
+
+    # # Terminate scan
+    # process.terminate()
+
+    # # Cleanup
+    # process.join()
 
 # terminate browser
 driver.quit()
