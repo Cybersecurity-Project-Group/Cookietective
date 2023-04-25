@@ -80,10 +80,10 @@ def scrape_links(url, current_time, stop_time):
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
-    print(f"start time for {urls[i]}: {datetime.datetime.now()}")
+    logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
     link = "http://" + urls[i]
     scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
-    print(f"end time for {urls[i]}: {datetime.datetime.now()}")
+    logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
     # process = multiprocessing.Process(target=scrape_links, name="Scan", args=(link,))
     
     # print (urls[i])
