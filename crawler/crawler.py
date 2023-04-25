@@ -29,6 +29,7 @@ opts = webdriver.FirefoxOptions()
 opts.add_argument("--private")
 opts.add_argument("--headless")
 opts.set_preference('javascript.enabled', False)
+opts.set_preference('network.trr.mode', 5)
 
 # # initiate browser driver
 # firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
