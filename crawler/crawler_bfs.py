@@ -18,7 +18,8 @@ url_start_index = int(sys.argv[2])
 url_end_index = int(sys.argv[3])
 
 # set up scan time
-scan_time = 30
+scan_time = 15
+driver_wait_time = 5
 
 # set up options for browser
 opts = webdriver.FirefoxOptions()
@@ -42,35 +43,43 @@ def scrape_links(url, current_time, stop_time):
     # visit first node
     visited.add(url)
     queue.append(url)
-    driver.get(url)
     
-    while queue:
+    while not queue.empty():
         h = queue.pop(0)
         logging.info(f"Scanning: {h}")
 
         # send request to URL
         driver.get(h)
 
-        # wait for HTML element with anchor tag to load
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.TAG_NAME, "a"))
-        )
+        try:
+            # wait for HTML element with anchor tag to load
+            WebDriverWait(driver, driver_wait_time).until(
+                EC.presence_of_element_located((By.TAG_NAME, "a"))
+            )
 
-        # locate HTML anchor tags
-        links = driver.find_elements(By.TAG_NAME, "a")
-        for neighbor in links:
-            # obtain links
-            href = neighbor.get_attribute("href")
-            if href and href.startswith("http"):
-                queue.append(neighbor)
+            # locate HTML anchor tags
+            links = driver.find_elements(By.TAG_NAME, "a")
+            for neighbor in links:
+                # obtain links
+                href = neighbor.get_attribute("href")
+                if href and href.startswith("http"):
+                    queue.append(neighbor)
         
+        except Exception as e:
+            # log error and continue scraping
+            logging.debug(f"Error scraping {url}: {e}")
+            return
+
     logging.debug(f"Done scanning: {url}")
+
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
     logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
+
     link = "http://" + urls[i]
     scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
+
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
 # terminate browser
