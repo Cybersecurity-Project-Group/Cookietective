@@ -44,7 +44,7 @@ def scrape_links(url, current_time, stop_time):
     visited.add(url)
     queue.append(url)
     
-    while not queue.empty():
+    while queue:
         h = queue.pop(0)
         logging.info(f"Scanning: {h}")
 
@@ -59,11 +59,12 @@ def scrape_links(url, current_time, stop_time):
 
             # locate HTML anchor tags
             links = driver.find_elements(By.TAG_NAME, "a")
+
             for neighbor in links:
                 # obtain links
                 href = neighbor.get_attribute("href")
                 if href and href.startswith("http"):
-                    queue.append(neighbor)
+                    queue.append(href)
         
         except Exception as e:
             # log error and continue scraping
