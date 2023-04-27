@@ -14,22 +14,22 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 # Install certificate and set up proxies for Linux
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # Add in mitmproxy certificate for local user
-    cp mitmproxy-ca-cert.pem ~/.local/share/ca-certificates/
-    trust anchor --store mitmproxy-ca-cert.pem
+    sudo cp mitmproxy-ca-cert.crt /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
+    sudo update-ca-certificates
+    trust anchor --store mitmproxy-ca-cert.crt
 
-    export http_proxy=localhost:8080
-    export https_proxy=localhost:8080
+    export http_proxy="http://localhost:8080"
+    export https_proxy="http://localhost:8080"
 
 else
     echo "ERROR: Not a supported Operating System"
 fi
 
-# Code that runs the stuff
-# sudo tcpdump -XX -A -G 10 -W 1 -w test.pcap &
-# python3 dnsscan.py test.pcap
+# Code that runs the traffic scanners in the background
+python3 dnsscan.py &
+python3 httpsscan.py &
+python3 crawler
 # python3 test_mitmproxy.py test.pcap
-mitmproxy
-sleep 10
 
 
 # End code cleanup: Remove the proxies and certificates
