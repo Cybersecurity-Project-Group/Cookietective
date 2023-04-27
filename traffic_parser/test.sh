@@ -14,12 +14,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 # Install certificate and set up proxies for Linux
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # Add in mitmproxy certificate for local user
-    sudo cp mitmproxy-ca-cert.crt /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
+    sudo cp mitmproxy-ca-cert.crt /usr/local/share/ca-certificates
     sudo update-ca-certificates
-    trust anchor --store mitmproxy-ca-cert.crt
 
-    export http_proxy="http://localhost:8080"
-    export https_proxy="http://localhost:8080"
+    export http_proxy=http://localhost:8080/
+    export https_proxy=http://localhost:8080/
 
 else
     echo "ERROR: Not a supported Operating System"
@@ -27,18 +26,16 @@ fi
 
 # Code that runs the traffic scanners in the background
 python3 dnsscan.py &
-python3 httpsscan.py &
-python3 crawler
-# python3 test_mitmproxy.py test.pcap
-
+sudo python3 httpsscan.py &
+# python3 crawler
 
 # End code cleanup: Remove the proxies and certificates
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    sudo security delete-certificate -c "mitmproxy" /Library/Keychains/System.keychain
-    networksetup -setwebproxystate "Wi-Fi" off
-    networksetup -setsecurewebproxystate "Wi-Fi" off
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    trust anchor --remove mitmproxy-ca-cert.pem
-    unset http_proxy
-    unset https_proxy
-fi
+# if [[ "$OSTYPE" == "darwin"* ]]; then
+#     sudo security delete-certificate -c "mitmproxy" /Library/Keychains/System.keychain
+#     networksetup -setwebproxystate "Wi-Fi" off
+#     networksetup -setsecurewebproxystate "Wi-Fi" off
+# elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+#     trust anchor --remove mitmproxy-ca-cert.pem
+#     unset http_proxy
+#     unset https_proxy
+# fi
