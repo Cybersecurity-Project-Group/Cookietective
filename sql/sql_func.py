@@ -18,7 +18,7 @@ def insertCNAMEpacketsEntry(domainName, sourceAddress, CNAMEAlias, hasAType):
             return
 
         # Insert into the database
-        cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType))
+        cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType, None))
     except:
         conn.close()
     else:   
@@ -46,7 +46,7 @@ def insertCookieEntry(domainName, src_ip, domain_setting, httponly, secure):
     cur = conn.cursor()
     # If fails to INSERT (if already exists as unique value, then do nothing)
     try:
-        cur.execute("INSERT INTO cookie VALUES (?, ?, ?, ?, ?)", (domainName, src_ip, domain_setting, httponly, secure))
+        cur.execute("INSERT INTO cookie VALUES (?, ?, ?, ?, ?, ?)", (domainName, src_ip, domain_setting, httponly, secure, None))
     except:
         conn.close()
     else:
@@ -54,6 +54,23 @@ def insertCookieEntry(domainName, src_ip, domain_setting, httponly, secure):
         conn.close()
     return
 
+# Helper function to be run at the end of crawler to set all entries with no set originalURL to be that of URL that just got parsed
+def insertOriginalURL(URL):
+    # Connect to the database
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+
+    # Update all originalURL values to be that of the current URL
+    cur.execute("UPDATE CNAMEpackets SET originalURL=? WHERE originalURL IS NULL", (URL,))
+    cur.execute("UPDATE cookie SET originalURL=? WHERE originalURL IS NULL", (URL,))
+
+    # Commit changes
+    conn.commit()
+    conn.close()
+
+    return
+
+    # Update all values in cookie and CNAMEpackets
 # Fetch functions
 
 def fetchDomainFromAlias(CNAMEAlias):
