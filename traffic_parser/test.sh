@@ -25,17 +25,19 @@ else
 fi
 
 # Code that runs the traffic scanners in the background
-python3 dnsscan.py &
-sudo python3 httpsscan.py &
+sudo python3 traffic_parser/dnsscan.py &
+# sudo python3 httpsscan.py &
+sudo mitmproxy -s traffic_parser/mitmproxy_script.py &
+python3 crawler/crawler.py crawler/sample_urls.txt 
 # python3 crawler
 
-# End code cleanup: Remove the proxies and certificates
-# if [[ "$OSTYPE" == "darwin"* ]]; then
-#     sudo security delete-certificate -c "mitmproxy" /Library/Keychains/System.keychain
-#     networksetup -setwebproxystate "Wi-Fi" off
-#     networksetup -setsecurewebproxystate "Wi-Fi" off
-# elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-#     trust anchor --remove mitmproxy-ca-cert.pem
-#     unset http_proxy
-#     unset https_proxy
-# fi
+End code cleanup: Remove the proxies and certificates
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # sudo security delete-certificate -c "mitmproxy" /Library/Keychains/System.keychain
+    networksetup -setwebproxystate "Wi-Fi" off
+    networksetup -setsecurewebproxystate "Wi-Fi" off
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # trust anchor --remove mitmproxy-ca-cert.pem
+    unset http_proxy
+    unset https_proxy
+fi
