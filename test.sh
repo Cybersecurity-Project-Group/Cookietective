@@ -2,15 +2,13 @@
 
 # Set up the network settings based on the operating system
 # Install the mitmproxy certificate
-if [[ -f "mitmproxy-ca-cert.crt" ]]; then
-    openssl x509 -in ~/.mitmproxy/mitmproxy-ca-cert.pem -out mitmproxy-ca-cert.crt
-fi
 
 # Install certificate and set up proxies for Mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
 
     # Add in the mitmproxy certificate
-    if [[ -f "mitmproxy-ca-cert.crt" ]]; then
+    if [[ ! -f "mitmproxy-ca-cert.crt" ]]; then
+        openssl x509 -in ~/.mitmproxy/mitmproxy-ca-cert.pem -out mitmproxy-ca-cert.crt
         sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain mitmproxy-ca-cert.crt
     fi
 
@@ -21,8 +19,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
     # Add in mitmproxy certificate for local user
-    if [[ -f "mitmproxy-ca-cert.crt" ]]; then
-        sudo cp mitmproxy-ca-cert.crt /usr/local/share/ca-certificates
+    if [[ ! -f "mitmproxy-ca-cert.crt" ]]; then
+        sudo cp ~/./mitmproxy-ca-cert.pem /usr/local/share/ca-certificates
         sudo update-ca-certificates
     fi
 
@@ -34,7 +32,7 @@ else
 fi
 
 # Code that runs the traffic scanners in the background
-sudo mitmproxy -s traffic_parser/mitmproxy_script.py &
+mitmdump -q -s traffic_parser/mitmproxy_script.py &
 sudo python3 traffic_parser/dnsscan.py &
 # sudo python3 httpsscan.py &
 
