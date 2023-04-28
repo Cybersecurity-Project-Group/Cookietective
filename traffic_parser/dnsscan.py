@@ -70,7 +70,7 @@ def main():
     scapy.load_layer("http")
     scapy.load_layer("tls")
     # Listens to traffic for DNS traffic (udp port 53) for 15 seconds then prints summary
-    scapy.sniff(filter="udp port 53", timeout=15, prn=parseDNS)
+    scapy.sniff(filter="udp port 53", prn=parseDNS)
 
     # for packet in scapy.PcapReader('test.pcap'):
     #     parseDNS(packet)
