@@ -45,3 +45,7 @@ The scanner that is currently implemented is great for checking if the domains h
 *Update to find multiple of these "long letter sequences"
     "www.hotels.hilton.com" and "www.hiltonhotels.com" would catch 'hilton' and 'hotel' as both being mentioned in the URL.
 ```
+
+## Implementation
+Domains that belong to the same website will share the same top level domain and domain name. The mostMatching() function can be used to see if two URLs have at least 2 matches, then they share the same root domain and are very likely owned by the same entity.\
+If domains do not have the same root domain, they still may be related and owned by the same person. We are using additional URL scans to determine if domains share a similar enough name to be considered related. 
