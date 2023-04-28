@@ -67,7 +67,6 @@ def parseDNS(packet):
             
 # Main function that executes the DNSscanner
 def main():
-    scapy.load_layer("http")
     scapy.load_layer("tls")
     # Listens to traffic for DNS traffic (udp port 53) for 15 seconds then prints summary
     scapy.sniff(filter="udp port 53", prn=parseDNS)
