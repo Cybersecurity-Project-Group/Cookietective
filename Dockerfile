@@ -6,14 +6,18 @@ RUN apt-get update -y
 RUN apt-get install python3 python3-pip ipython3 wget -y
 RUN apt-get install firefox -y
 
-WORKDIR /CoolestProject
+WORKDIR /home/CoolestProject
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY Dockerfile .
+COPY database.db .
+COPY crawler/ ./crawler
+COPY traffic_parser/ ./traffic_parser
+COPY sql/ ./sql
+COPY sample_urls.txt .
 
-# nvm
-# CMD ["python3", "traffic_parser/dnsscan.py"]
-# ENTRYPOINT [ "python3", "crawler/crawler.py"]
+CMD ["python3", "traffic_parser/dnsscan.py"]
+# ENTRYPOINT [ "python3", "crawler/crawler_dfs.py"]
 # CMD ["sample_urls.txt", "0", "3"]
