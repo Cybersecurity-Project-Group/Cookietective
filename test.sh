@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Check that the HTTPS and UDP ports are given as inputs
+if [[ $# < 2 ]]; then
+    echo "Ports not specified: 'bash test.sh [HTTPS_PORT] [UDP_PORT]'"
+    exit
+fi
+
+HTTP_PORT=$1
+UDP_PORT=$2
+address=http://localhost:$HTTP_PORT/
+
 # Set up the network settings based on the operating system
 # Install the mitmproxy certificate
 
@@ -12,8 +22,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain mitmproxy-ca-cert.crt
     fi
 
-    networksetup -setwebproxy "Wi-Fi" localhost 8080
-    networksetup -setsecurewebproxy "Wi-Fi" localhost 8080
+    networksetup -setwebproxy "Wi-Fi" localhost $HTTP_PORT
+    networksetup -setsecurewebproxy "Wi-Fi" localhost $HTTP_PORT
 
 # Install certificate and set up proxies for Linux
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -24,8 +34,8 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo update-ca-certificates
     fi
 
-    export http_proxy=http://localhost:8080/
-    export https_proxy=http://localhost:8080/
+    export http_proxy=$address
+    export https_proxy=$address
 
 else
     echo "ERROR: Not a supported Operating System"
@@ -33,11 +43,12 @@ fi
 
 # Code that runs the traffic scanners in the background
 mitmdump -q -s traffic_parser/mitmproxy_script.py &
+sleep 3
 sudo python3 traffic_parser/dnsscan.py &
 # sudo python3 httpsscan.py &
 
 # Run the crawler
-python3 crawler/crawler_dfs.py sample_urls.txt 0 9
+python3 crawler/crawler.py sample_urls.txt 0 9
 
 #End code cleanup: Remove the proxies and certificates
 if [[ "$OSTYPE" == "darwin"* ]]; then

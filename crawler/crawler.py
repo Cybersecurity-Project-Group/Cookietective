@@ -84,6 +84,7 @@ for i in range(url_start_index, url_end_index):
     link = "http://" + urls[i]
     scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
+    
     # process = multiprocessing.Process(target=scrape_links, name="Scan", args=(link,))
     
     # print (urls[i])
