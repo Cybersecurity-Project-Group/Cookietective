@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # Check that the HTTPS and UDP ports are given as inputs
-if [[ $# < 4 ]]; then
-    echo "Ports not specified: 'bash test.sh [HTTPS_PORT] [UDP_PORT]'"
+if [[ $# < 2 ]]; then
+    echo "URL bounds not specified: 'bash test.sh [begin index] [end index]'"
     exit
 fi
 
-HTTP_PORT=$1
-UDP_PORT=$2
-ADDRESS=http://localhost:$HTTP_PORT/
+URL_LIST_START=$1
+URL_LIST_END=$2
 
-URL_LIST_START=$3
-URL_LIST_END=$4
+HTTP_PORT=8080
+UDP_PORT=53
+ADDRESS=http://localhost:$HTTP_PORT/
 
 # Set up the network settings based on the operating system
 # Install the mitmproxy certificate
