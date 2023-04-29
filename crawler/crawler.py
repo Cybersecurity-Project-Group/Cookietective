@@ -5,6 +5,12 @@ from selenium.webdriver.support import expected_conditions as EC
 import sys
 import logging
 import time
+import datetime
+
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import sql.sql_func as sql
 
 # set up logging config
 logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
@@ -17,34 +23,34 @@ urls = file.readlines()
 url_start_index = int(sys.argv[2])
 url_end_index = int(sys.argv[3])
 
-# set up request interval
-sleepTime = 1
-
-# # provide path to browser driver
-# PATH = "geckodriver"
+# set up scan time
+scan_time = 30
 
 # set up options for browser
 opts = webdriver.FirefoxOptions()
 opts.add_argument("--private")
 opts.add_argument("--headless")
+opts.set_preference('javascript.enabled', False)
+opts.set_preference('network.trr.mode', 5)
 
-# # initiate browser driver
-# firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
+# initiate browser driver
 driver = webdriver.Firefox(options=opts)
 
 # set of scraped links
 scraped = set()
 
-def scrape_links(url):
-
+def scrape_links(url, current_time, stop_time):
+    # check timer
+    if current_time >= stop_time:
+        return
     # check URL if already scraped
     if url in scraped:
-        logging.info("Skipping: %s", url)
+        logging.debug(f"Skipping {url}")
         return 
     
-    logging.info("Scraping: %s", url)
+    logging.info(f"Scanning: {url}")
 
-    # add scraped url to set
+    # add scanned url to set
     scraped.add(url)
 
     # send request to URL
@@ -62,21 +68,27 @@ def scrape_links(url):
             # obtain links
             href = link.get_attribute("href")
             if href and href.startswith("http"):
-                scrape_links(href)
+                scrape_links(href, datetime.datetime.now(), stop_time)
                 
     except Exception as e:
         # log error and continue scraping
-        logging.debug("Error scraping %s: %s", url, e)
+        logging.debug(f"Error scraping {url}: {e}")
         return
 
-    finally:
-        logging.debug("Done scraping: %s", url)
+    else:
+        logging.debug(f"Done scanning: {url}")
+    logging.debug("returning")
 
-
-# prompt user for initial URL to scrape
+# iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
-    scrape_links("http://" + urls[i])
+    logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
+    link = "http://" + urls[i]
+    scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
+    logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
+
+    # update all currently not claimed SQLite entries as belonging to the current URL
+    sql.insertOriginalURL(urls[i].strip('\n'))
 
 # terminate browser
 driver.quit()
-logging.info("done")
+logging.info(f"counter: {len(scraped)}")
