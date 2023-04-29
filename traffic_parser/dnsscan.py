@@ -3,7 +3,6 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import sql.sql_func as sql
-import subprocess
 
 listCNAMES = []
 
@@ -67,16 +66,7 @@ def parseDNS(packet):
             
 # Main function that executes the DNSscanner
 def main():
-    scapy.load_layer("http")
-    scapy.load_layer("tls")
     # Listens to traffic for DNS traffic (udp port 53) for 15 seconds then prints summary
-    scapy.sniff(filter="udp port 53", timeout=15, prn=parseDNS)
-
-    # for packet in scapy.PcapReader('test.pcap'):
-    #     parseDNS(packet)
-
-    # # Iterate through all CNAME packets and list their name, alias pair
-    # for i, packet in enumerate(listCNAMES):
-    #     print("CNAME Packet", i, ": Domain:", packet.domain, "CNAME Alias:", packet.cname, "Has A-type", packet.has_A)
+    scapy.sniff(filter="udp port 53", prn=parseDNS)
 
 main()
