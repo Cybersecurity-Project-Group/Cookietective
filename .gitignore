@@ -2,3 +2,6 @@
 .pyc
 .env
 __pycache__
+geckodriver.log
+sql/__pycache__/__init__.cpython-38.pyc
+sql/__pycache__/sql_func.cpython-38.pyc
