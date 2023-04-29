@@ -8,14 +8,9 @@ for id in $ids; do
     docker cp $id:/home/CoolestProject/database.db $id.db
 
     # Copy the data from the database into the current database
-    sqlite3 database.db "ATTACH DATABASE '$id.db' AS results;"
-    sqlite3 database.db "INSERT INTO CNAMEpackets SELECT * FROM results.CNAMEpackets;"
-    sqlite3 database.db "INSERT INTO ip SELECT * FROM results.ip;"
-    sqlite3 database.db "INSERT INTO cookie SELECT * FROM results.cookie;"
-
-    # Drop the tables out of the database
-    sqlite3 database.db "DROP TABLE results.CNAMEpackets;"
-    sqlite3 database.db "DROP TABLE results.ip;"
-    sqlite3 database.db "DROP TABLE results.cookie;"
-
+    sqlite3 database.db """ATTACH DATABASE '78e4cb45fcd8.db' AS results;
+    INSERT or IGNORE INTO CNAMEpackets SELECT * FROM results.CNAMEpackets;
+    INSERT or IGNORE INTO ip SELECT * FROM results.ip;
+    INSERT or IGNORE INTO cookie SELECT * FROM results.cookie;
+    """
 done
