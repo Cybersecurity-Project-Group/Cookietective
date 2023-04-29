@@ -9,7 +9,7 @@ RUN apt-get install sqlite3 -y
 RUN apt-get install libpcap0.8 -y
 RUN apt-get install mitmproxy -y
 
-WORKDIR /home/CoolestProject
+WORKDIR /home/Cookietective
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
