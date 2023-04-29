@@ -24,5 +24,7 @@ COPY cookie.sh .
 COPY mitmproxy-ca-cert.crt .
 
 RUN sqlite3 database.db "delete from cnamepackets" ".exit"
+RUN sqlite3 database.db "delete from cookie" ".exit"
+RUN sqlite3 database.db "delete from ip" ".exit"
 
 ENTRYPOINT ["bash", "cookie.sh"]
