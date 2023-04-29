@@ -2,13 +2,16 @@
 
 # Check that the HTTPS and UDP ports are given as inputs
 if [[ $# < 2 ]]; then
-    echo "Ports not specified: 'bash test.sh [HTTPS_PORT] [UDP_PORT]'"
+    echo "URL bounds not specified: 'bash test.sh [begin index] [end index]'"
     exit
 fi
 
-HTTP_PORT=$1
-UDP_PORT=$2
-address=http://localhost:$HTTP_PORT/
+URL_LIST_START=$1
+URL_LIST_END=$2
+
+HTTP_PORT=8080
+UDP_PORT=53
+ADDRESS=http://localhost:$HTTP_PORT/
 
 # Set up the network settings based on the operating system
 # Install the mitmproxy certificate
@@ -34,8 +37,8 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         update-ca-certificates
     fi
 
-    export http_proxy=$address
-    export https_proxy=$address
+    export http_proxy=$ADDRESS
+    export https_proxy=$ADDRESS
 
 else
     echo "ERROR: Not a supported Operating System"
@@ -48,7 +51,7 @@ python3 traffic_parser/dnsscan.py $UDP_PORT &
 # python3 httpsscan.py &
 
 # Run the crawler
-python3 crawler/crawler.py sample_urls.txt 0 9
+python3 crawler/crawler.py sample_urls.txt $URL_LIST_START $URL_LIST_END
 
 #End code cleanup: Remove the proxies and certificates
 if [[ "$OSTYPE" == "darwin"* ]]; then
