@@ -9,7 +9,8 @@ cur.execute("""CREATE TABLE CNAMEpackets (
     sourceAddress text,
     CNAMEAlias text,
     hasAType int,
-    UNIQUE(domainName, sourceAddress, CNAMEAlias, hasAType)
+    originalURL text DEFAULT NULL,
+    UNIQUE(domainName, sourceAddress, CNAMEAlias, hasAType, originalURL)
     )""")
 
 # Initialize the IP table that stores IP packets associated with A-type packets
@@ -26,7 +27,8 @@ cur.execute("""CREATE TABLE cookie (
     domain_setting text NOT NULL,
     httponly int,
     secure int,
-    UNIQUE(domainName, sourceAddress, domain_setting, httponly, secure)
+    originalURL text DEFAULT NULL,
+    UNIQUE(domainName, sourceAddress, domain_setting, httponly, secure, originalURL)
     )""")
 
 conn.commit()
