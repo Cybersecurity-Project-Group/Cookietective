@@ -1,6 +1,6 @@
 import sqlite3
 import socket
-import sys
+import ipaddress
 import tldextract
 import whois
 from url_checker import url_func
@@ -80,5 +80,38 @@ def firstPartyCheck(domainName, dbFile='database.db'):
 
 
 
+def IPcheck(domainName, dbFile='database.db'):
+    conn = sqlite3.connect(dbFile)
+    c = conn.cursor()
+
+    # get the associated CNAMEAlias and originalURL values
+    c.execute("SELECT CNAMEAlias, originalURL FROM CNAMEpackets WHERE domainName=?", (domainName,))
+    row = c.fetchone()
+    cnameDomain, inputURL = row[0], row[1]
+
+    # get the IP addresses of the domain and input URL
+    cnameIP = socket.gethostbyname(cnameDomain)
+    inputIP = socket.gethostbyname(inputURL)
+
+    # check if cnameIP is a subnetwork of inputIP
+    if ipaddress.IPv4Address(cnameIP) in ipaddress.IPv4Network(inputIP):
+        return 1
+    else:
+        return 0
+        
+        
+        
+def cloakDetector(domainName):
+    Arecord_test = hasAType(domainName)
+    CNAMErecord_test = hasCNAMErecord(domainName)
+    firstParty_test = firstPartyCheck(domainName)
+    IP_test = IPcheck(domainName)
+
+    if Arecord_test == 0 and CNAMErecord_test == 1 and firstParty_test == 0 and IP_test == 0:
+        print("According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
+        return 1
+    else:
+        print("According to Approach 2, first party cookies are likely NOT being shared with third parties by CNAME cloaking")
+        return 0
 
 

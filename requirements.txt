@@ -4,3 +4,4 @@ pandas==2.0.0
 mitmproxy==4.0.4
 tldextract
 whois
+ipaddress
