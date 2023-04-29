@@ -1,4 +1,5 @@
 import sqlite3
+import socket
 import sys
 import tldextract
 import whois
@@ -32,6 +33,13 @@ def sameOwner(url1, url2):
     return False
 
 
+
+def get_ip_address(domain):
+    ip_address = socket.gethostbyname(domain)
+    return ip_address
+
+
+
 def hasAType(domainName, dbFile='database.db'):
     conn = sqlite3.connect(dbFile)
     c = conn.cursor()
@@ -53,6 +61,23 @@ def hasCNAMErecord(domainName, dbFile='database.db'):
     return result
     
     
+
+def firstPartyCheck(domainName, dbFile='database.db'):
+    conn = sqlite3.connect(dbFile)
+    c = conn.cursor()
+    c.execute(f"SELECT CNAMEAlias FROM CNAMEpackets WHERE domainName='{domainName}'")
+    result = c.fetchone()
+    conn.close()
+
+    if result is None:
+        return 0
+
+    cnameAlias = result[0]
+    if sameOwner(domainName, cnameAlias):
+        return 1
+    else:
+        return 0
+
 
 
 
