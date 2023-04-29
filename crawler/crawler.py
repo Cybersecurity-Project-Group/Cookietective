@@ -91,7 +91,7 @@ for i in range(url_start_index, url_end_index):
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
     # Update all currently not claimed SQLite entries as belonging to the current URL
-    sql.insertOriginalURL(urls[i])
+    sql.insertOriginalURL(urls[i].strip('\n'))
     
     # process = multiprocessing.Process(target=scrape_links, name="Scan", args=(link,))
     
