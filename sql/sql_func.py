@@ -46,7 +46,7 @@ def insertCookieEntry(domainName, src_ip, domain_setting):
     cur = conn.cursor()
     # If fails to INSERT (if already exists as unique value, then do nothing)
     try:
-        cur.execute("INSERT INTO cookie VALUES (?, ?, ?, ?, ?, ?)", (domainName, src_ip, domain_setting, None))
+        cur.execute("INSERT INTO cookie VALUES (?, ?, ?, ?)", (domainName, src_ip, domain_setting, None))
     except:
         conn.close()
     else:
