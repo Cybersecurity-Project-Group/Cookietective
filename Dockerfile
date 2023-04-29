@@ -5,8 +5,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y
 RUN apt-get install python3 python3-pip ipython3 wget -y
 RUN apt-get install firefox -y
-RUN apt-get install -y sqlite3
-RUN apt-get install -y libpcap0.8
+RUN apt-get install sqlite3 -y
+RUN apt-get install libpcap0.8 -y
+RUN apt-get install mitmproxy -y
 
 WORKDIR /home/CoolestProject
 
@@ -22,7 +23,8 @@ COPY sample_urls.txt .
 
 RUN sqlite3 database.db "delete from cnamepackets" ".exit"
 
-CMD python3 traffic_parser/dnsscan.py & python3 crawler/crawler_dfs.py sample_urls.txt 0 3
+CMD bash test.sh
+# CMD python3 traffic_parser/dnsscan.py & python3 crawler/crawler_dfs.py sample_urls.txt 0 3
 # CMD mitmdump -s traffic_parser/mitmproxy_script.py & sudo python3 traffic_parser/dnsscan.py & python3 crawler/crawler_dfs.py sample_urls.txt 0 3
 # ENTRYPOINT [ "python3", "crawler/crawler_dfs.py"]
 # CMD ["sample_urls.txt", "0", "3"]
