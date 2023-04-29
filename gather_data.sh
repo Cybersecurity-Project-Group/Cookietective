@@ -13,4 +13,6 @@ for id in $ids; do
     INSERT or IGNORE INTO ip SELECT * FROM results.ip;
     INSERT or IGNORE INTO cookie SELECT * FROM results.cookie;
     """
+
+    rm $id.db
 done
