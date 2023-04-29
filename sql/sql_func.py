@@ -18,7 +18,7 @@ def insertCNAMEpacketsEntry(domainName, sourceAddress, CNAMEAlias, hasAType):
             return
 
         # Insert into the database
-        cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType, None))
+        cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType, None, None, None))
     except:
         conn.close()
     else:   
