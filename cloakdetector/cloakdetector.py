@@ -43,7 +43,8 @@ def get_ip_address(domain):
 
 
 
-def hasAType(domainName, dbFile='database.db'):
+def hasAType(domainName, dbFile='../database.db'):
+    dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
     conn = sqlite3.connect(dbFile)
     c = conn.cursor()
     c.execute("SELECT hasAType FROM CNAMEpackets WHERE domainName=?", (domainName,))
@@ -55,7 +56,8 @@ def hasAType(domainName, dbFile='database.db'):
         return None
         
 
-def hasCNAMErecord(domainName, dbFile='database.db'):
+def hasCNAMErecord(domainName, dbFile='../database.db'):
+    dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
     conn = sqlite3.connect(dbFile)
     c = conn.cursor()
     c.execute("SELECT EXISTS(SELECT 1 FROM CNAMEpackets WHERE domainName = ? LIMIT 1)", (domainName,))
@@ -65,7 +67,8 @@ def hasCNAMErecord(domainName, dbFile='database.db'):
     
     
 
-def firstPartyCheck(domainName, dbFile='database.db'):
+def firstPartyCheck(domainName, dbFile='../database.db'):
+    dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
     conn = sqlite3.connect(dbFile)
     c = conn.cursor()
     c.execute(f"SELECT CNAMEAlias FROM CNAMEpackets WHERE domainName='{domainName}'")
@@ -83,7 +86,8 @@ def firstPartyCheck(domainName, dbFile='database.db'):
 
 
 
-def IPcheck(domainName, dbFile='database.db'):
+def IPcheck(domainName, dbFile='../database.db'):
+    dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
     conn = sqlite3.connect(dbFile)
     c = conn.cursor()
 
@@ -104,11 +108,12 @@ def IPcheck(domainName, dbFile='database.db'):
         
         
         
-def cloakDetector(domainName):
-    Arecord_test = hasAType(domainName)
-    CNAMErecord_test = hasCNAMErecord(domainName)
-    firstParty_test = firstPartyCheck(domainName)
-    IP_test = IPcheck(domainName)
+def cloakDetector(domainName, dbFile='../database.db'):
+    dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
+    Arecord_test = hasAType(domainName, dbFile)
+    CNAMErecord_test = hasCNAMErecord(domainName, dbFile)
+    firstParty_test = firstPartyCheck(domainName, dbFile)
+    IP_test = IPcheck(domainName, dbFile)
 
     if Arecord_test == 0 and CNAMErecord_test == 1 and firstParty_test == 0 and IP_test == 0:
         print("According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
@@ -117,4 +122,17 @@ def cloakDetector(domainName):
         print("According to Approach 2, first party cookies are likely NOT being shared with third parties by CNAME cloaking")
         return 0
 
+
+if len(sys.argv) < 2:
+    print("Usage: python3 cloakdetector.py domainName [dbFile]")
+    sys.exit(1)
+
+domainName = sys.argv[1]
+dbFile = '../database.db' if len(sys.argv) < 3 else sys.argv[2]
+result = cloakDetector(domainName, dbFile)
+
+if result == 1:
+    print("According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
+else:
+    print("According to Approach 2, first party cookies are likely NOT being shared with third parties by CNAME cloaking")
 
