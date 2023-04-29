@@ -3,8 +3,11 @@ import socket
 import ipaddress
 import tldextract
 import whois
-from url_checker import url_func
-from sql import sql_func
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import sql.sql_func
+import url_checker.url_func
 
 def sameOwner(url1, url2):
     ext1 = tldextract.extract(url1)
