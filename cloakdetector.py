@@ -2,6 +2,7 @@ import socket
 import sqlite3
 import pandas as pd
 import sys
+from url-checker import url_func
 
 def is_first_party_domain(domain_name, cname_domain_name):
     return domain_name.endswith(cname_domain_name)
