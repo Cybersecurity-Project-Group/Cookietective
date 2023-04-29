@@ -11,7 +11,7 @@ for (( i=0 ; i < $NUM_CONTAINERS ; i++ )); do
     start=$(( $URLS_PER_CONTAINER*$i ))
     end=$(( $URLS_PER_CONTAINER*($i+1) -1 ))
     
-    docker run -p $UDP_PORT:53/udp -p $HTTPS_PORT:8080 snickerdoodle $start $end
+    docker run -dp $UDP_PORT:53/udp -dp $HTTPS_PORT:8080 snickerdoodle $start $end
 
 done
 
