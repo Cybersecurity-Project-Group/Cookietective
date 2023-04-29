@@ -118,3 +118,16 @@ def cloakDetector(domainName, dbFile='database.db'):
         return 0
 
 
+if len(sys.argv) < 2:
+    print("Usage: python3 cloakdetector.py domainName [dbFile]")
+    sys.exit(1)
+
+domainName = sys.argv[1]
+dbFile = "database.db" if len(sys.argv) < 3 else sys.argv[2]
+result = cloakDetector(domainName, dbFile)
+
+if result == 1:
+    print("According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
+else:
+    print("According to Approach 2, first party cookies are likely NOT being shared with third parties by CNAME cloaking")
+
