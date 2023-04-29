@@ -1,7 +1,8 @@
 #!/bin/bash
 
 NUM_CONTAINERS=10
-NUM_URLS=150
+NUM_URLS=3300
+INDEX_OFFSET=0
 URLS_PER_CONTAINER=$(( $NUM_URLS/$NUM_CONTAINERS ))
 
 docker build -t snickerdoodle .
@@ -10,9 +11,9 @@ for (( i=0 ; i < $NUM_CONTAINERS ; i++ )); do
     UDP_PORT=$(( $i + 9000 ))
     HTTPS_PORT=$(( $i + 9500))
 
-    start=$(( $URLS_PER_CONTAINER*$i ))
-    end=$(( $URLS_PER_CONTAINER*($i+1) -1 ))
-    
+    start=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*$i ))
+    end=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*($i+1) -1 ))
+        
     docker run -dp $UDP_PORT:53/udp -dp $HTTPS_PORT:8080 snickerdoodle $start $end
 
 done
