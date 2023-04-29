@@ -12,7 +12,7 @@ for (( i=0 ; i < $NUM_CONTAINERS ; i++ )); do
     HTTPS_PORT=$(( $i + 9500))
 
     start=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*$i ))
-    end=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*($i+1) -1 ))
+    end=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*($i+1)))
         
     docker run -dp $UDP_PORT:53/udp -dp $HTTPS_PORT:8080 snickerdoodle $start $end
 
