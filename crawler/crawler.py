@@ -24,7 +24,7 @@ url_start_index = int(sys.argv[2])
 url_end_index = int(sys.argv[3])
 
 # set up scan time
-scan_time = 30
+scan_time = 15
 
 # set up options for browser
 opts = webdriver.FirefoxOptions()
