@@ -104,11 +104,11 @@ def IPcheck(domainName, dbFile='database.db'):
         
         
         
-def cloakDetector(domainName):
-    Arecord_test = hasAType(domainName)
-    CNAMErecord_test = hasCNAMErecord(domainName)
-    firstParty_test = firstPartyCheck(domainName)
-    IP_test = IPcheck(domainName)
+def cloakDetector(domainName, dbFile='database.db'):
+    Arecord_test = hasAType(domainName, dbFile)
+    CNAMErecord_test = hasCNAMErecord(domainName, dbFile)
+    firstParty_test = firstPartyCheck(domainName, dbFile)
+    IP_test = IPcheck(domainName, dbFile)
 
     if Arecord_test == 0 and CNAMErecord_test == 1 and firstParty_test == 0 and IP_test == 0:
         print("According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
