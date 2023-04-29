@@ -3,9 +3,13 @@ The purpose of the CloakDetector is to detect if a domain could be sharing first
 third parties by CNAME cloaking. It incorporates the checks specified in Approach 2:
 
 • A domain name set in a Domain attribute does not have any A records.
+
 • A domain name set in a Domain attribute has CNAME record(s).
+
 • The domain name set in the above CNAME record is not a first-party domain name.
+
 • The IP address of the domain name set in the above CNAME record is not an IP address of the input URL.
+
 
 ## Functions
 #### sameOwner(url1, url2)
