@@ -25,11 +25,19 @@ cur.execute("""CREATE TABLE cookie (
     domainName text NOT NULL,
     sourceAddress text NOT NULL,
     domain_setting text NOT NULL,
-    httponly int,
-    secure int,
     originalURL text DEFAULT NULL,
-    UNIQUE(domainName, sourceAddress, domain_setting, httponly, secure, originalURL)
+    UNIQUE(domainName, sourceAddress, domain_setting, originalURL)
     )""")
+
+# cur.execute("""CREATE TABLE cookie (
+#     domainName text NOT NULL,
+#     sourceAddress text NOT NULL,
+#     domain_setting text NOT NULL,
+#     httponly int,
+#     secure int,
+#     originalURL text DEFAULT NULL,
+#     UNIQUE(domainName, sourceAddress, domain_setting, httponly, secure, originalURL)
+#     )""")
 
 conn.commit()
 conn.close()
