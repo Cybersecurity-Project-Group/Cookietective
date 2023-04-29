@@ -22,7 +22,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     # Add in the mitmproxy certificate
     if [[ ! -f "mitmproxy-ca-cert.crt" ]]; then
         openssl x509 -in ~/.mitmproxy/mitmproxy-ca-cert.pem -out mitmproxy-ca-cert.crt
-        sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain mitmproxy-ca-cert.crt
+        security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain mitmproxy-ca-cert.crt
     fi
 
     networksetup -setwebproxy "Wi-Fi" localhost $HTTP_PORT
@@ -33,8 +33,8 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
     # Add in mitmproxy certificate for local user
     if [[ ! -f "mitmproxy-ca-cert.crt" ]]; then
-        sudo cp ~/./mitmproxy-ca-cert.pem /usr/local/share/ca-certificates
-        sudo update-ca-certificates
+        cp ~/./mitmproxy-ca-cert.pem /usr/local/share/ca-certificates
+        update-ca-certificates
     fi
 
     export http_proxy=$ADDRESS
@@ -47,7 +47,7 @@ fi
 # Code that runs the traffic scanners in the background
 mitmdump -q --listen-port $HTTP_PORT -s traffic_parser/mitmproxy_script.py &
 sleep 3
-sudo python3 traffic_parser/dnsscan.py $UDP_PORT &
+python3 traffic_parser/dnsscan.py $UDP_PORT &
 # python3 httpsscan.py &
 
 # Run the crawler

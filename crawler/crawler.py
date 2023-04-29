@@ -26,9 +26,6 @@ url_end_index = int(sys.argv[3])
 # set up scan time
 scan_time = 30
 
-# # provide path to browser driver
-# PATH = "geckodriver"
-
 # set up options for browser
 opts = webdriver.FirefoxOptions()
 opts.add_argument("--private")
@@ -36,8 +33,7 @@ opts.add_argument("--headless")
 opts.set_preference('javascript.enabled', False)
 opts.set_preference('network.trr.mode', 5)
 
-# # initiate browser driver
-# firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
+# initiate browser driver
 driver = webdriver.Firefox(options=opts)
 
 # set of scraped links
@@ -90,21 +86,8 @@ for i in range(url_start_index, url_end_index):
     scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
-    # Update all currently not claimed SQLite entries as belonging to the current URL
-    sql.insertOriginalURL(urls[i])
-    
-    # process = multiprocessing.Process(target=scrape_links, name="Scan", args=(link,))
-    
-    # print (urls[i])
-
-    # # Wait 15 seconds for scan
-    # time.sleep(scanTime)
-
-    # # Terminate scan
-    # process.terminate()
-
-    # # Cleanup
-    # process.join()
+    # update all currently not claimed SQLite entries as belonging to the current URL
+    sql.insertOriginalURL(urls[i].strip('\n'))
 
 # terminate browser
 driver.quit()
