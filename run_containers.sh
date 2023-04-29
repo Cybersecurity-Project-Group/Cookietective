@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NUM_CONTAINERS=10
-NUM_URLS=10
+NUM_URLS=150
 URLS_PER_CONTAINER=$(( $NUM_URLS/$NUM_CONTAINERS ))
 
 docker build -t snickerdoodle .
