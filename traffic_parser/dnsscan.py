@@ -65,8 +65,15 @@ def parseDNS(packet):
                     sql.insertIpEntry(domain, addr)
             
 # Main function that executes the DNSscanner
-def main():
+def main(dns_port):
     # Listens to traffic for DNS traffic (udp port 53) for 15 seconds then prints summary
-    scapy.sniff(filter="udp port 53", prn=parseDNS)
+    scapy.sniff(filter="udp port " + dns_port, prn=parseDNS)
 
-main()
+# Check which port to use to search for DNS traffic (53 by default unless specified otherwise)
+if (len(sys.argv) > 1):
+    dns_port = sys.argv[1]
+else:
+    dns_port = 53
+
+# Run the scapy library to parse through DNS traffic on port dns_port
+main(dns_port)

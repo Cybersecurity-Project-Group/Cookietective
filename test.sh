@@ -42,9 +42,9 @@ else
 fi
 
 # Code that runs the traffic scanners in the background
-mitmdump -q -s traffic_parser/mitmproxy_script.py &
+mitmdump -q --listen-port $HTTP_PORT -s traffic_parser/mitmproxy_script.py &
 sleep 3
-sudo python3 traffic_parser/dnsscan.py &
+sudo python3 traffic_parser/dnsscan.py $UDP_PORT &
 # sudo python3 httpsscan.py &
 
 # Run the crawler
