@@ -34,7 +34,7 @@ opts.add_argument("--headless")
 opts.set_preference('javascript.enabled', False)
 opts.set_preference('network.trr.mode', 5)
 opts.set_preference("permissions.default.image", 2)
-fp.set_preference("http.response.timeout", scan_time)
+opts.set_preference("http.response.timeout", scan_time)
 
 # initiate browser driver
 driver = webdriver.Firefox(options=opts)
