@@ -3,8 +3,8 @@ from time import sleep
 import whois
 import sqlite3
 
-def compareWhois(rowNum): # given the row number of the table, compare the domain that belongs to the
-    conn = sqlite3.connect('database.db')
+def compareWhois(rowNum, database): # given the row number of the table, compare the domain that belongs to the
+    conn = sqlite3.connect(database)
     cur = conn.cursor()
 
     # Execute the SELECT statement to retrieve the domainName and originalURL values for a specific row
@@ -25,16 +25,19 @@ def compareWhois(rowNum): # given the row number of the table, compare the domai
 
     returnVal = 0
 
+    if domainNameWhois == None or originalURLWhois == None:
+        returnVal = 2
+
     # If the organizations are the same, write one to database and return 1
-    if domainNameWhois.org == originalURLWhois.org:
+    elif domainNameWhois.org == originalURLWhois.org:
         # Update the whoisAnalysis value to 1 for the row with the specified rowid value
-        cur.execute("UPDATE CNAMEpackets SET whoisAnalysis = ? WHERE rowid = ?", (1, rowNum))
+        #cur.execute("UPDATE CNAMEpackets SET whoisAnalysis = ? WHERE rowid = ?", (1, rowNum))
         returnVal = 1
 
     # If they are not the same, return 0
     elif domainNameWhois.org != originalURLWhois.org:
         # Update the whoisAnalysis value to 0 for the row with the specified rowid value
-        cur.execute("UPDATE CNAMEpackets SET whoisAnalysis = ? WHERE rowid = ?", (0, rowNum))
+        #cur.execute("UPDATE CNAMEpackets SET whoisAnalysis = ? WHERE rowid = ?", (0, rowNum))
         returnVal = 0
 
     conn.commit()
