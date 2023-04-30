@@ -1,6 +1,6 @@
 import re
 from urllib.parse import urlparse
-#from whois_check import compareWhois
+from whois_check import compareWhois
 import sqlite3
 
 """
@@ -239,14 +239,27 @@ def main():
         curr = b[0]
         domainName = curr[0].decode()
         originalURL = str(curr[1])
-        if compare_url(rowid,DB_file) == False:
+        whoisval = compareWhois(rowid, DB_file)
+        if whoisval == 2:
+            if compare_url(rowid,DB_file) == False:
+                bad_matching, domainset = cookie_check(rowid,DB_file)
+                if bad_matching == True:
+                    cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,domainset,1,1,0,0))
+                    conn.commit()
+                else:
+                    conn.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,1,0,0,0))
+                    conn.commit()
+            else:
+                cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,0,0,0,0))
+                conn.commit()
+        elif whoisval == 0:
             bad_matching, domainset = cookie_check(rowid,DB_file)
             if bad_matching == True:
                 cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,domainset,1,1,0,0))
                 conn.commit()
             else:
                 conn.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,1,0,0,0))
-                conn.commit()
+                conn.commit()    
         else:
             cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,0,0,0,0))
             conn.commit()

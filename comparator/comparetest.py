@@ -14,7 +14,7 @@ results = cur.fetchall()
 
 stringsin = [result[0].decode('utf-8').strip('.') for result in results]
 
-df = comparator(*stringsin)
+df = comparator(stringsin)
 
 df.to_csv('output.csv', index=False)
 

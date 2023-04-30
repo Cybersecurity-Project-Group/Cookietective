@@ -112,6 +112,14 @@ def fetchATypeRecordsFromDomain(domainName):
 
     return result
 
-def set(domainName, originalURL, majmill, notrack):
+# Function for accuracy checking that will add in the comparator values
+def setComparator(domainName, majmill, notrack):
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
+    try:
+        cur.execute("UPDATE findings SET majmill=?, notrack=? WHERE domainName=?", (majmill, notrack, domainName))
+    except:
+        print("Error: Failed to update majmill and notrack values")
+        conn.close()
+    return
+    
