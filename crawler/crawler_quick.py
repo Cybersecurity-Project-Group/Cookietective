@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import sys
-# import logging
+import logging
 import datetime
 
 import sys
@@ -13,8 +13,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import sql.sql_func as sql
 
 # set up logging config
-# logging.basicConfig(level=# logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
-# logging.info("start")
+logging.basicConfig(level= logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
+logging.info("start")
 
 # manage command-line args
 file = open(sys.argv[1])
@@ -39,7 +39,7 @@ driver = webdriver.Firefox(options=opts)
 
 def scrape_links(url, stop_time):  
     counter = 1
-    print("--" + url.strip('\n') + "--")
+    logging.info("--" + url.strip('\n') + "--")
 
     # data structures for BFS
     queue = set()
@@ -84,7 +84,7 @@ def scrape_links(url, stop_time):
         except:
             continue
 
-    print("Scanned: " + str(counter) + " links")
+    logging.info("Scanned: " + str(counter) + " links")
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
