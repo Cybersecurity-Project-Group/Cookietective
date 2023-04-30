@@ -33,7 +33,6 @@ def insertIpEntry(domainName, ip):
     # If fails to INSERT (if already exists as unique value, then do nothing)
     try:
         cur.execute("INSERT INTO ip VALUES (?, ?)", (domainName, ip))
-        cur.execute("INSERT INTO ip VALUES ('hi', 'hi')")
     except:
         conn.close()
     else:

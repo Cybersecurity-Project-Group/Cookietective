@@ -10,8 +10,8 @@ cur.execute("""CREATE TABLE CNAMEpackets (
     CNAMEAlias text,
     hasAType int,
     originalURL text DEFAULT NULL,
-    UNIQUE(domainName, sourceAddress, CNAMEAlias, hasAType),
-    whoisAnalysis int
+    whoisAnalysis int,
+    UNIQUE(domainName, sourceAddress, CNAMEAlias, hasAType)
     )""")
 
 # Initialize the IP table that stores IP packets associated with A-type packets
