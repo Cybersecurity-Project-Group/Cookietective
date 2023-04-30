@@ -62,9 +62,10 @@ def scrape_links(url, stop_time):
             if href and href.startswith("http"):
                 queue.add(href)
     
-    except Exception as e:
-        # log error and continue scraping
-        logging.info(e)
+    # except Exception as e:
+    #     logging.info(e)
+    #     pass
+    except:
         pass
 
     # visit first layer
@@ -80,10 +81,12 @@ def scrape_links(url, stop_time):
         try:
             driver.get(i)
             counter += 1
-        except Exception as e:
-            logging.info(e)
-            pass
-    
+        # except Exception as e:
+        #     logging.info(e)
+        #     pass
+        except:
+            continue
+
     # finish before time limit
     logging.info("Scanned: " + str(counter) + " links")
 
