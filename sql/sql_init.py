@@ -34,6 +34,7 @@ cur.execute("""CREATE TABLE cookie (
 cur.execute("""CREATE TABLE findings (
     originalURL text NOT NULL,
     domainName text NOT NULL,
+    domain_setting text DEFAULT NULL,
     party int,
     vuln int,
     majmill int,
