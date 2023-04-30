@@ -5,7 +5,7 @@ ids=$(docker ps -f "status=exited" -q)
 # Iterate through all container id's
 for id in $ids; do
     # Copy the database.db from the container into the current directory
-    docker cp $id:/home/CoolestProject/database.db $id.db
+    docker cp $id:/home/Cookietective/database.db $id.db
 
     # Copy the data from the database into the current database
     sqlite3 database.db """ATTACH DATABASE '$id.db' AS results;
