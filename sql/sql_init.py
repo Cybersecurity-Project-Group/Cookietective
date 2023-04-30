@@ -30,6 +30,17 @@ cur.execute("""CREATE TABLE cookie (
     UNIQUE(domainName, sourceAddress, domain_setting)
     )""")
 
+# Initialize the findings table that stores output of the compiledDatabase analysis
+cur.execute("""CREATE TABLE findings (
+    originalURL text NOT NULL,
+    domainName text NOT NULL,
+    party int,
+    vuln int,
+    majmill int,
+    notrack int,
+    UNIQUE(originalURL, domainName)
+    )""")
+
 # cur.execute("""CREATE TABLE cookie (
 #     domainName text NOT NULL,
 #     sourceAddress text NOT NULL,
