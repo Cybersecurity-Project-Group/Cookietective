@@ -1,19 +1,36 @@
-import whois
-import threading
+import sys
+import socket
+from datetime import datetime as dt
+
+import time
 import sqlite3
-from time import sleep
 
-# create a global event object
-whoisFound = threading.Event()  # Sets an event that is global
+def get_whois_data(ip):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(("whois.arin.net", 43))
+    s.send(('n ' + ip + '\r\n').encode())
 
-def get_whois_data(whoisDomain):
-    print("Thread started to look up " + whoisDomain)
-    global whoisData
-    whoisData = whois.whois(whoisDomain)
+    response = b""
 
-    # set the event to indicate that the whois call is completed
-    whoisFound.set()
-    sleep(1)
+    # setting time limit in secondsmd
+    startTime = time.mktime(dt.now().timetuple())
+    timeLimit = 3
+    while True:
+        elapsedTime = time.mktime(dt.now().timetuple()) - startTime
+        data = s.recv(4096)
+        response += data
+        if (not data) or (elapsedTime >= timeLimit):
+            break
+    s.close()
+
+    return response.decode()
+
+def findOrgName(whoisString):
+    orgNameIndex = whoisString.find("OrgName")
+    orgNameEnd = whoisString.find("OrgId")
+    orgName = whoisString[orgNameIndex+16:orgNameEnd]
+    return orgName
+
 
 def compareWhois(rowNum, database): # given the row number of the table, compare the domain that belongs to the
     conn = sqlite3.connect(database)

@@ -13,7 +13,7 @@ def get_whois_data(whoisDomain):
 
 '''Test Code'''
 # define the domain names
-domainName = "linkedin.com"
+domainName = "cnn.com"
 originalURL = "play.google.com"
 
 print("Domain Name: " + domainName)
