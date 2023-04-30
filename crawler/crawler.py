@@ -1,10 +1,10 @@
+# Crawler using BFS Algorithm
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import sys
 import logging
-import time
 import datetime
 
 import sys
@@ -24,10 +24,8 @@ url_start_index = int(sys.argv[2])
 url_end_index = int(sys.argv[3])
 
 # set up scan time
-scan_time = 30
-
-# # provide path to browser driver
-# PATH = "geckodriver"
+scan_time = 15
+driver_wait_time = 5
 
 # set up options for browser
 opts = webdriver.FirefoxOptions()
@@ -36,76 +34,67 @@ opts.add_argument("--headless")
 opts.set_preference('javascript.enabled', False)
 opts.set_preference('network.trr.mode', 5)
 
-# # initiate browser driver
-# firefox_service = webdriver.firefox.webdriver.Webdriver(executable_path=PATH)
+# initiate browser driver
 driver = webdriver.Firefox(options=opts)
 
-# set of scraped links
-scraped = set()
+def scrape_links(url, current_time, stop_time):  
+    print("--" + url.strip('\n') + "--")
+    # data structures for BFS
+    visited = set()
+    queue = []
 
-def scrape_links(url, current_time, stop_time):
-    # check timer
-    if current_time >= stop_time:
-        return
-    # check URL if already scraped
-    if url in scraped:
-        logging.debug(f"Skipping {url}")
-        return 
+    # visit first node
+    visited.add(url)
+    queue.append(url)
     
-    logging.info(f"Scanning: {url}")
+    while queue:
+        # check time
+        if datetime.datetime.now() >= stop_time:
+            logging.info("Time limit passed")
+            return
+        
+        # get head of queue
+        h = queue.pop(0)
+        logging.info(f"Scanning: {h}")
 
-    # add scanned url to set
-    scraped.add(url)
+        # send request to URL
+        driver.get(h)
 
-    # send request to URL
-    driver.get(url)
+        try:
+            # wait for HTML element with anchor tag to load
+            WebDriverWait(driver, driver_wait_time).until(
+                EC.presence_of_element_located((By.TAG_NAME, "a"))
+            )
 
-    try:
-        # wait for HTML element with anchor tag to load
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.TAG_NAME, "a"))
-        )
+            # locate HTML anchor tags
+            links = driver.find_elements(By.TAG_NAME, "a")
 
-        # locate HTML anchor tags
-        links = driver.find_elements(By.TAG_NAME, "a")
-        for link in links:
-            # obtain links
-            href = link.get_attribute("href")
-            if href and href.startswith("http"):
-                scrape_links(href, datetime.datetime.now(), stop_time)
-                
-    except Exception as e:
-        # log error and continue scraping
-        logging.debug(f"Error scraping {url}: {e}")
-        return
-
-    else:
-        logging.debug(f"Done scanning: {url}")
-    logging.debug("returning")
+            for neighbor in links:
+                # check time
+                if datetime.datetime.now() >= stop_time:
+                    logging.info("Time limit passed")
+                    return
+        
+                # obtain links
+                href = neighbor.get_attribute("href")
+                if href and href.startswith("http") and not href in visited:
+                    queue.append(href)
+                    logging.debug(f"Queued: {href}")
+        
+        except Exception as e:
+            # log error and continue scraping
+            logging.debug(f"Error scraping {url}: {e}")
+            return
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
     logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
-    link = "http://" + urls[i]
+    link = "http://" + urls[i].strip('\n')
     scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
-    # Update all currently not claimed SQLite entries as belonging to the current URL
+    # update all currently not claimed SQLite entries as belonging to the current URL
     sql.insertOriginalURL(urls[i].strip('\n'))
-    
-    # process = multiprocessing.Process(target=scrape_links, name="Scan", args=(link,))
-    
-    # print (urls[i])
-
-    # # Wait 15 seconds for scan
-    # time.sleep(scanTime)
-
-    # # Terminate scan
-    # process.terminate()
-
-    # # Cleanup
-    # process.join()
 
 # terminate browser
 driver.quit()
-logging.info(f"counter: {len(scraped)}")

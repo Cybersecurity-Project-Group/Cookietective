@@ -8,21 +8,24 @@
 import sys
 import pandas as pd
 
-# read in MajesticMillion and NoTracking lists as sets
-with open('majmill_list.txt', 'r') as f:
-    majmill = set(f.read().splitlines())
 
-with open('notrack_list.txt', 'r') as f:
-    notrack = set(f.read().splitlines())
+def comparator(*stringsin):
+    # read in MajesticMillion and NoTracking lists as sets
+    with open('majmill_list.txt', 'r') as f:
+        majmill = set(f.read().splitlines())
+    with open('notrack_list.txt', 'r') as f:
+        notrack = set(f.read().splitlines())
 
-# get input list of strings from command-line arguments
-stringsin = sys.argv[1].split(',')
+    # create output table as a DataFrame
+    outtable = pd.DataFrame({'Address': stringsin,
+                             'MajesticMillion': [1 if s in majmill else 0 for s in stringsin],
+                             'NoTracking': [1 if s in notrack else 0 for s in stringsin]})
 
-# create output table as a DataFrame
-outtable = pd.DataFrame({'Address': stringsin,
-                         'MajesticMillion': [1 if s in majmill else 0 for s in stringsin],
-                         'NoTracking': [1 if s in notrack else 0 for s in stringsin]})
+    # print output table
+    print(outtable)
 
-# print output table
-print(outtable)
+
+stringsin = sys.argv[1:]
+comparator(*stringsin)
+
 
