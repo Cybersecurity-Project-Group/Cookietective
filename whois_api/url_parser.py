@@ -1,6 +1,6 @@
 import re
 from urllib.parse import urlparse
-from whois_check import compareWhois
+#from whois_check import compareWhois
 import sqlite3
 
 """
@@ -132,6 +132,7 @@ def cookie_check(rowid, database):
     cur.execute("SELECT domain_setting FROM cookie WHERE originalURL = ?",(original_URL,))#original_URL)
     c = cur.fetchall()
     bad_matching = False
+    domainSet = None
     for d in c:
         if bad_matching == True:
             break
@@ -142,12 +143,13 @@ def cookie_check(rowid, database):
                     count, matching = mostMatching(a,e)
                     if match_found(count,matching) == True:
                         bad_matching = True
+                        domainSet = d[0]
                         break
         #print("If next two match:")
         #print(CNAMEAlias.decode())
         #print(d[0])
 
-    return bad_matching
+    return bad_matching, domainSet
     
 
 
@@ -191,13 +193,85 @@ def main():
     """
     # !!!!
 
+    """
+    party: 0 = 1st party, 1 = 3rd party, 2 = unknown
+    vuln: 0 = no, 1 = yes, 2 = unknown
+    """
+    
+    """
+    CREATE TABLE findings (
+    originalURL text NOT NULL,
+    domainName text NOT NULL,
+    domain_setting default NULL
+    party int, 
+    vuln int,
+    majmill int,
+    notrack int,
+    UNIQUE(originalURL, domainName)
+    );
+    """
+
     DB_file = '../sampledatabase.db'
 
     conn = sqlite3.connect(DB_file)
     cur = conn.cursor()
+
+    cur.execute("""CREATE TABLE IF NOT EXISTS findings (
+    originalURL text NOT NULL,
+    domainName text NOT NULL,
+    domain_setting text DEFAULT NULL,
+    party int,
+    vuln int,
+    majmill int,
+    notrack int,
+    UNIQUE(originalURL, domainName)
+    )""")
+    conn.commit()
+
     cur.execute("SELECT rowid FROM CNAMEpackets")
     c = cur.fetchall()
+    
 
+    for m in c:
+        rowid = m[0]
+        cur.execute("SELECT domainName,originalURL FROM CNAMEpackets WHERE rowid="+str(rowid))
+        b = cur.fetchall()
+        curr = b[0]
+        domainName = curr[0].decode()
+        originalURL = str(curr[1])
+        if compare_url(rowid,DB_file) == False:
+            bad_matching, domainset = cookie_check(rowid,DB_file)
+            if bad_matching == True:
+                cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,domainset,1,1,0,0))
+                conn.commit()
+            else:
+                conn.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,1,0,0,0))
+                conn.commit()
+        else:
+            cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,0,0,0,0))
+            conn.commit()
+
+    cur.execute("SELECT domainName,originalURL,domain_setting FROM findings WHERE party=1 AND vuln=1")
+    c = cur.fetchall()
+    for curr in c:
+        domainName = curr[0]
+        originalURL = str(curr[1])
+        domainset = curr[2]
+        print("These are vulnerable results: ")
+        print(domainName)
+        print(originalURL)
+        print(domainset)
+    """
+        elif whois_res == 1:
+            print("NO CLOAKING FOUND\n")
+        else:
+            if cookie_check(rowid,DB_file) == True:
+                print("FOUND CLOAKING\n")
+            else:
+                print("NO CLOAKING FOUND\n")
+    """
+    conn.close()
+    """
     for m in c:
         rowid = m[0]
         whois_res = compareWhois(rowid,DB_file)
@@ -216,10 +290,9 @@ def main():
                 print("FOUND CLOAKING\n")
             else:
                 print("NO CLOAKING FOUND\n")
-            
+       """     
         #print(rowid)
-    
-    conn.close()
+   
     # !!!!
 
 
