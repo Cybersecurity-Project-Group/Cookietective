@@ -96,7 +96,13 @@ for i in range(url_start_index, url_end_index):
     # logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
     # update all currently not claimed SQLite entries as belonging to the current URL
-    sql.insertOriginalURL(urls[i].strip('\n'))
+    try:
+        sql.insertOriginalURL(urls[i].strip('\n'))
+    except:
+        try:
+            sql.insertOriginalURL(urls[i].strip('\n'))
+        except:
+            logging.info("INVALID value: " + urls[i].strip('\n'))
 
 # terminate browser
 driver.quit()
