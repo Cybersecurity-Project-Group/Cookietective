@@ -25,7 +25,6 @@ url_end_index = int(sys.argv[3])
 
 # set up scan time
 scan_time = 20
-driver_wait_time = 5
 
 # set up options for browser
 opts = webdriver.FirefoxOptions()
@@ -49,7 +48,7 @@ def scrape_links(url, stop_time):
     
     try:
         # wait for HTML element with anchor tag to load
-        WebDriverWait(driver, driver_wait_time).until(
+        WebDriverWait(driver, scan_time).until(
             EC.presence_of_element_located((By.TAG_NAME, "a"))
         )
     
@@ -63,9 +62,9 @@ def scrape_links(url, stop_time):
             if href and href.startswith("http"):
                 queue.add(href)
     
-    except:
+    except Exception as e:
         # log error and continue scraping
-        # logging.debug(f"Error scraping {url}")
+        logging.info(e)
         pass
 
     # visit first layer
@@ -81,8 +80,9 @@ def scrape_links(url, stop_time):
         try:
             driver.get(i)
             counter += 1
-        except:
-            continue
+        except Exception as e:
+            logging.info(e)
+            pass
     
     # finish before time limit
     logging.info("Scanned: " + str(counter) + " links")
