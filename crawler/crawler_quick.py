@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import sys
-import logging
+# import logging
 import datetime
 
 import sys
@@ -13,8 +13,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import sql.sql_func as sql
 
 # set up logging config
-logging.basicConfig(level=logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
-logging.info("start")
+# logging.basicConfig(level=# logging.INFO, format="%(levelname)s (%(asctime)s): %(message)s")
+# logging.info("start")
 
 # manage command-line args
 file = open(sys.argv[1])
@@ -38,6 +38,7 @@ opts.set_preference('network.trr.mode', 5)
 driver = webdriver.Firefox(options=opts)
 
 def scrape_links(url, stop_time):  
+    counter = 1
     print("--" + url.strip('\n') + "--")
 
     # data structures for BFS
@@ -64,29 +65,32 @@ def scrape_links(url, stop_time):
     
     except Exception as e:
         # log error and continue scraping
-        logging.debug(f"Error scraping {url}: {e}")
+        # logging.debug(f"Error scraping {url}: {e}")
         return
-
 
     # visit first layer
     for i in queue:
         # check time
         if datetime.datetime.now() >= stop_time:
-            logging.info("Time limit passed")
+            # logging.info("Time limit passed")
+            print("Scanned: " + counter + " links")
             return
         
         # send request to URL
-        logging.info(f"Scanning: {i}")
+        # logging.info(f"Scanning: {i}")
         driver.get(i)
+        counter += 1
+    
+    print("Scanned: " + counter + " links")
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
-    logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
+    # logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
 
     link = "http://" + urls[i]
     scrape_links(link, datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
 
-    logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
+    # logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
     # update all currently not claimed SQLite entries as belonging to the current URL
     sql.insertOriginalURL(urls[i].strip('\n'))
