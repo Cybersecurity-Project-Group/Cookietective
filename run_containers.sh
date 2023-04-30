@@ -5,6 +5,7 @@ NUM_URLS=3300
 INDEX_OFFSET=0
 URLS_PER_CONTAINER=$(( $NUM_URLS/$NUM_CONTAINERS ))
 
+# build image
 docker build -t snickerdoodle .
 
 for (( i=0 ; i < $NUM_CONTAINERS ; i++ )); do
@@ -14,6 +15,7 @@ for (( i=0 ; i < $NUM_CONTAINERS ; i++ )); do
     start=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*$i ))
     end=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*($i+1)))
         
+    # run container
     docker run -dp $UDP_PORT:53/udp -dp $HTTPS_PORT:8080 snickerdoodle $start $end
 
 done
