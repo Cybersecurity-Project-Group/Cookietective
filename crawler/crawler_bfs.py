@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import sys
 import logging
 import datetime
+from queue import Queue
 
 import sys
 import os
@@ -41,7 +42,7 @@ def scrape_links(url, stop_time):
     print("--" + url.strip('\n') + "--")
     # data structures for BFS
     visited = set()
-    queue = []
+    queue = Queue()
 
     # visit first node
     visited.add(url)
@@ -84,7 +85,6 @@ def scrape_links(url, stop_time):
         except Exception as e:
             # log error and continue scraping
             logging.debug(f"Error scraping {url}: {e}")
-            return
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
@@ -92,7 +92,7 @@ for i in range(url_start_index, url_end_index):
 
     link = "http://" + urls[i].strip('\n')
     scrape_links(link, datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
-    
+
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
     # update all currently not claimed SQLite entries as belonging to the current URL
