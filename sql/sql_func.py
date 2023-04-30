@@ -111,3 +111,7 @@ def fetchATypeRecordsFromDomain(domainName):
     result = cur.fetchall()
 
     return result
+
+def set(domainName, originalURL, majmill, notrack):
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()

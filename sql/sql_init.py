@@ -37,9 +37,9 @@ cur.execute("""CREATE TABLE findings (
     party int,
     vuln int,
     majmill int,
-    notrack,
+    notrack int,
     UNIQUE(originalURL, domainName)
-    ))""")
+    )""")
 
 # cur.execute("""CREATE TABLE cookie (
 #     domainName text NOT NULL,
