@@ -1,7 +1,6 @@
 import re
 from urllib.parse import urlparse
-from difflib import SequenceMatcher
-import whois_check
+from whois_check import compareWhois
 import sqlite3
 
 """
