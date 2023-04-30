@@ -1,4 +1,3 @@
-import whois
 import threading
 import sqlite3
 from time import sleep
