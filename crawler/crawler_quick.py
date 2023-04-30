@@ -42,11 +42,11 @@ def scrape_links(url, stop_time):
 
     # data structures for BFS
     queue = set()
-
-    # visit first node (layer 0)
-    driver.get(url)
     
     try:
+        # visit first node (layer 0)
+        driver.get(url)
+
         # wait for HTML element with anchor tag to load
         WebDriverWait(driver, scan_time).until(
             EC.presence_of_element_located((By.TAG_NAME, "a"))
@@ -62,10 +62,8 @@ def scrape_links(url, stop_time):
             if href and href.startswith("http"):
                 queue.add(href)
     
-    # except Exception as e:
-    #     logging.info(e)
-    #     pass
-    except:
+    except Exception as e:
+        logging.info(e)
         pass
 
     # visit first layer
@@ -81,11 +79,9 @@ def scrape_links(url, stop_time):
         try:
             driver.get(i)
             counter += 1
-        # except Exception as e:
-        #     logging.info(e)
-        #     pass
-        except:
-            continue
+        except Exception as e:
+            logging.info(e)
+            pass
 
     # finish before time limit
     logging.info("Scanned: " + str(counter) + " links")
