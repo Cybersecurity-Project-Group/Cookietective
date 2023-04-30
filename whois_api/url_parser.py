@@ -159,6 +159,7 @@ def cookie_check(rowid, database):
     originalURL text DEFAULT NULL,
     """
 def main():
+    """
     test_urls = ["http://www.drugemporium.com/cec/cstage?eccookie=@eccookie@&ecaction=de_ecwalkin&template=de_walkin.en.htm",
                  "http://preview.ynot.com/cgibin/nd_CGI_50.cgi/YnotPhoenix/CFsMain.",
                  "pa.clients6.google.com",
@@ -167,6 +168,7 @@ def main():
     a_match = "pa.clients6.google.com"
     b_match = "https://mail.google.com/mail/u/1/#inbox/FMcgzGsNTcfRRvxvJxDrFkNcqjvf"
     DB_file = '../sampledatabase.db'
+
     for site in test_urls:
         m=parse_url(site)
         print(m)
@@ -186,8 +188,16 @@ def main():
     cur.execute("SELECT rowid FROM CNAMEpackets")
     c = cur.fetchall()
     print(c)
-
+    """
     # !!!!
+
+    DB_file = '../sampledatabase.db'
+
+    conn = sqlite3.connect(DB_file)
+    cur = conn.cursor()
+    cur.execute("SELECT rowid FROM CNAMEpackets")
+    c = cur.fetchall()
+
     for m in c:
         rowid = m[0]
         whois_res = compareWhois(rowid,DB_file)
