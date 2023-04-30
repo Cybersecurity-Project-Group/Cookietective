@@ -94,6 +94,11 @@ def IPcheck(domainName, dbFile='../database.db'):
     # get the associated CNAMEAlias and originalURL values
     c.execute("SELECT CNAMEAlias, originalURL FROM CNAMEpackets WHERE domainName=?", (domainName,))
     row = c.fetchone()
+
+    # check if a row was returned
+    if row is None:
+        return None
+
     cnameDomain, inputURL = row[0], row[1]
 
     # get the IP addresses of the domain and input URL
@@ -116,10 +121,8 @@ def cloakDetector(domainName, dbFile='../database.db'):
     IP_test = IPcheck(domainName, dbFile)
 
     if Arecord_test == 0 and CNAMErecord_test == 1 and firstParty_test == 0 and IP_test == 0:
-        print("According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
         return 1
     else:
-        print("According to Approach 2, first party cookies are likely NOT being shared with third parties by CNAME cloaking")
         return 0
 
 
@@ -132,7 +135,6 @@ dbFile = '../database.db' if len(sys.argv) < 3 else sys.argv[2]
 result = cloakDetector(domainName, dbFile)
 
 if result == 1:
-    print("According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
+    print(domainName, ": -!!- According to Approach 2, first party cookies are likely being shared with third parties by CNAME cloaking")
 else:
-    print("According to Approach 2, first party cookies are likely NOT being shared with third parties by CNAME cloaking")
-
+    print(domainName, ": -XX- According to Approach 2, first party cookies are likely NOT being shared with third parties by CNAME cloaking")

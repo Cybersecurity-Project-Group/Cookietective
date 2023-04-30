@@ -1,10 +1,3 @@
-# call comparator.py with a comma-separated list of websites
-#
-# example: python3 comparator.py google.com,pokenoms.com,youtube.com,polandki.pl,bmwgroup.com
-#
-# output table indicates if passed sites are present (1) or not (0) 
-# in the Majestic Million and NoTracking lists
-
 import sys
 import pandas as pd
 
@@ -23,8 +16,8 @@ def comparator(*stringsin):
 
     # print output table
     print(outtable)
-
-
+    return outtable
+    
 stringsin = sys.argv[1:]
 comparator(*stringsin)
 

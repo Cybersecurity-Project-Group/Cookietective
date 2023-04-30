@@ -1,7 +1,36 @@
-from time import sleep
+import sys
+import socket
+from datetime import datetime as dt
 
-import whois
+import time
 import sqlite3
+
+def get_whois_data(ip):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(("whois.arin.net", 43))
+    s.send(('n ' + ip + '\r\n').encode())
+
+    response = b""
+
+    # setting time limit in secondsmd
+    startTime = time.mktime(dt.now().timetuple())
+    timeLimit = 3
+    while True:
+        elapsedTime = time.mktime(dt.now().timetuple()) - startTime
+        data = s.recv(4096)
+        response += data
+        if (not data) or (elapsedTime >= timeLimit):
+            break
+    s.close()
+
+    return response.decode()
+
+def findOrgName(whoisString):
+    orgNameIndex = whoisString.find("OrgName")
+    orgNameEnd = whoisString.find("OrgId")
+    orgName = whoisString[orgNameIndex+16:orgNameEnd]
+    return orgName
+
 
 def compareWhois(rowNum, database): # given the row number of the table, compare the domain that belongs to the
     conn = sqlite3.connect(database)
@@ -18,17 +47,33 @@ def compareWhois(rowNum, database): # given the row number of the table, compare
     print("Domain Name: " + domainName)
     print("Original URL: " + originalURL)
 
-    # Pull data from Whois
-    domainNameWhois = whois.whois(domainName)
-    sleep(.7) # maybe try to remove this?
-    originalURLWhois = whois.whois(originalURL)
+    # reset the event object
+    whoisFound.clear()
 
+    # Pull data from Whois
+    domainNameWhoisThread = threading.Thread(target=get_whois_data, args=(domainName,))
+    domainNameWhoisThread.start()
+    whoisFound.wait()
+    domainNameWhois = whoisData
     print(domainNameWhois.org)
+
+    # reset the event object
+    domainNameWhoisThread.join()
+    whoisFound.clear()
+
+    # pull data from Whois for other thread
+    originalURLWhoisThread = threading.Thread(target=get_whois_data, args=(originalURL,))
+    originalURLWhoisThread.start()
+    whoisFound.wait()
+    originalURLWhois = whoisData
     print(originalURLWhois.org)
 
-    returnVal = 0
+    # reset these
+    originalURLWhoisThread.join()
+    whoisFound.clear()
 
-    if domainNameWhois == None or originalURLWhois == None:
+    returnVal = 0
+    if domainNameWhois is None or originalURLWhois is None:
         returnVal = 2
 
     # If the organizations are the same, write one to database and return 1
