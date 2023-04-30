@@ -24,7 +24,7 @@ url_start_index = int(sys.argv[2])
 url_end_index = int(sys.argv[3])
 
 # set up scan time
-scan_time = 15
+scan_time = 20
 driver_wait_time = 5
 
 # set up options for browser
@@ -37,7 +37,7 @@ opts.set_preference('network.trr.mode', 5)
 # initiate browser driver
 driver = webdriver.Firefox(options=opts)
 
-def scrape_links(url, current_time, stop_time):  
+def scrape_links(url, stop_time):  
     print("--" + url.strip('\n') + "--")
     # data structures for BFS
     visited = set()
@@ -89,8 +89,10 @@ def scrape_links(url, current_time, stop_time):
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
     logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
+
     link = "http://" + urls[i].strip('\n')
-    scrape_links(link, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
+    scrape_links(link, datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
+    
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
     # update all currently not claimed SQLite entries as belonging to the current URL

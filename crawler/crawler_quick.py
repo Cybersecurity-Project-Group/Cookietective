@@ -25,7 +25,7 @@ url_end_index = int(sys.argv[3])
 
 # set up scan time
 scan_time = 20
-driver_wait_time = 15
+driver_wait_time = 5
 
 # set up options for browser
 opts = webdriver.FirefoxOptions()
@@ -46,19 +46,27 @@ def scrape_links(url, stop_time):
     # visit first node (layer 0)
     driver.get(url)
     
-    # wait for HTML element with anchor tag to load
-    WebDriverWait(driver, driver_wait_time).until(
-        EC.presence_of_element_located((By.TAG_NAME, "a"))
-    )
+    try:
+        # wait for HTML element with anchor tag to load
+        WebDriverWait(driver, driver_wait_time).until(
+            EC.presence_of_element_located((By.TAG_NAME, "a"))
+        )
+    
+        # locate HTML anchor tags
+        links = driver.find_elements(By.TAG_NAME, "a")
 
-    # locate HTML anchor tags
-    links = driver.find_elements(By.TAG_NAME, "a")
+        for link_to_add in links:
+            # add links to queue
+            href = link_to_add.get_attribute("href")
 
-    for link_to_add in links:
-        # add links to queue
-        href = link_to_add.get_attribute("href")
-        if href and href.startswith("http") and not href in queue:
-            queue.add(href)
+            if href and href.startswith("http"):
+                queue.add(href)
+    
+    except Exception as e:
+        # log error and continue scraping
+        logging.debug(f"Error scraping {url}: {e}")
+        return
+
 
     # visit first layer
     for i in queue:
@@ -67,17 +75,17 @@ def scrape_links(url, stop_time):
             logging.info("Time limit passed")
             return
         
-        logging.info(f"Scanning: {i}")
-
         # send request to URL
+        logging.info(f"Scanning: {i}")
         driver.get(i)
-
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
     logging.debug(f"start time for {urls[i]}: {datetime.datetime.now()}")
-    link = "http://" + urls[i].strip('\n')
+
+    link = "http://" + urls[i]
     scrape_links(link, datetime.datetime.now() + datetime.timedelta(seconds=scan_time))
+
     logging.debug(f"end time for {urls[i]}: {datetime.datetime.now()}")
 
     # update all currently not claimed SQLite entries as belonging to the current URL
