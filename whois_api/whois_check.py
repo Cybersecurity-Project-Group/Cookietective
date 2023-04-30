@@ -75,9 +75,8 @@ def compareWhois(rowNum, database): # given the row number of the table, compare
     conn.close()
     return returnVal
 
-'''Test Code'''
+'''Test Code
 DB_file = '../sampledatabase.db'
-rowid = 8
-
-for rowid in range(10):
-    whois_res = compareWhois(rowid+1,DB_file)
+rowid = 3
+whois_res = compareWhois(rowid+1,DB_file)
+'''
