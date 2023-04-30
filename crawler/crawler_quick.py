@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import sys
 import logging
 import datetime
@@ -32,6 +33,7 @@ opts.add_argument("--private")
 opts.add_argument("--headless")
 opts.set_preference('javascript.enabled', False)
 opts.set_preference('network.trr.mode', 5)
+opts.set_preference("permissions.default.image", 2)
 
 # initiate browser driver
 driver = webdriver.Firefox(options=opts)
@@ -69,15 +71,15 @@ def scrape_links(url, stop_time):
     # visit first layer
     for i in queue:
         # check time
-        if datetime.datetime.now() >= stop_time:
-            # logging.info("Time limit passed")
-            logging.info("Scanned: " + str(counter) + " links")
-            return
-        
-        # send request to URL
-        # logging.info(f"Scanning: {i}")
         try:
+            if datetime.datetime.now() >= stop_time:
+                # logging.info("Time limit passed")
+                logging.info("Scanned: " + str(counter) + " links")
+                return
+        
+            # send request to URL
             driver.get(i)
+            # logging.info(f"Scanned: {i}")
             counter += 1
         except Exception as e:
             logging.info(e)
