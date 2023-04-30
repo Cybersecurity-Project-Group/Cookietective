@@ -1,4 +1,4 @@
-# Crawler using BFS Algorithm
+# Crawler with Single Layer Algorithm
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import sys
 import logging
 import datetime
+from queue import Queue
 
 import sys
 import os
@@ -25,7 +26,7 @@ url_end_index = int(sys.argv[3])
 
 # set up scan time
 scan_time = 15
-driver_wait_time = 5
+driver_wait_time = 15
 
 # set up options for browser
 opts = webdriver.FirefoxOptions()
@@ -39,14 +40,34 @@ driver = webdriver.Firefox(options=opts)
 
 def scrape_links(url, current_time, stop_time):  
     print("--" + url.strip('\n') + "--")
-    # data structures for BFS
-    visited = set()
-    queue = []
 
-    # visit first node
-    visited.add(url)
-    queue.append(url)
+    # data structures for BFS
+    queue = Queue()
+
+    # visit first node (layer 0)
+    driver.get(url)
     
+    try:
+        # wait for HTML element with anchor tag to load
+        WebDriverWait(driver, driver_wait_time).until(
+            EC.presence_of_element_located((By.TAG_NAME, "a"))
+        )
+
+        # locate HTML anchor tags
+        links = driver.find_elements(By.TAG_NAME, "a")
+
+        for link_to_add in links:
+            # add links to queue
+            href = link_to_add.get_attribute("href")
+            if href and href.startswith("http") and not href in queue:
+                queue.put(href)
+    
+    except Exception as e:
+        # log error and continue scraping
+        logging.debug(f"Error scraping {url}: {e}")
+        return
+
+    # visit first layer
     while queue:
         # check time
         if datetime.datetime.now() >= stop_time:
@@ -54,37 +75,11 @@ def scrape_links(url, current_time, stop_time):
             return
         
         # get head of queue
-        h = queue.pop(0)
-        logging.info(f"Scanning: {h}")
+        next_link = queue.get(0)
+        logging.info(f"Scanning: {next_link}")
 
         # send request to URL
-        driver.get(h)
-
-        try:
-            # wait for HTML element with anchor tag to load
-            WebDriverWait(driver, driver_wait_time).until(
-                EC.presence_of_element_located((By.TAG_NAME, "a"))
-            )
-
-            # locate HTML anchor tags
-            links = driver.find_elements(By.TAG_NAME, "a")
-
-            for neighbor in links:
-                # check time
-                if datetime.datetime.now() >= stop_time:
-                    logging.info("Time limit passed")
-                    return
-        
-                # obtain links
-                href = neighbor.get_attribute("href")
-                if href and href.startswith("http") and not href in visited:
-                    queue.append(href)
-                    logging.debug(f"Queued: {href}")
-        
-        except Exception as e:
-            # log error and continue scraping
-            logging.debug(f"Error scraping {url}: {e}")
-            return
+        driver.get(next_link)
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
