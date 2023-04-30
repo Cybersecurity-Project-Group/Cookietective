@@ -12,8 +12,11 @@ def compareWhois(rowNum, database): # given the row number of the table, compare
 
     # Fetch the result set and retrieve the values
     row = cur.fetchone()
-    domainName = row[0]
+    domainName = row[0].decode()
     originalURL = row[1]
+
+    print("Domain Name: " + domainName)
+    print("Original URL: " + originalURL)
 
     # Pull data from Whois
     domainNameWhois = whois.whois(domainName)
