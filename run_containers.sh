@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NUM_CONTAINERS=8
-NUM_URLS=3400
+NUM_URLS=3600
 URLS_PER_CONTAINER=$(( $NUM_URLS/$NUM_CONTAINERS ))
 
 if [[ $# < 1 ]]; then
