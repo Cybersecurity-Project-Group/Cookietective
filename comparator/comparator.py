@@ -16,8 +16,8 @@ def comparator(*stringsin):
 
     # print output table
     print(outtable)
-
-
+    return outtable
+    
 stringsin = sys.argv[1:]
 comparator(*stringsin)
 
