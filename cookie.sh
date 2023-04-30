@@ -51,7 +51,7 @@ python3 traffic_parser/dnsscan.py $UDP_PORT &
 # python3 httpsscan.py &
 
 # Run the crawler
-python3 crawler/crawler.py sample_urls.txt $URL_LIST_START $URL_LIST_END
+python3 crawler/crawler_quick.py sample_urls.txt $URL_LIST_START $URL_LIST_END
 
 #End code cleanup: Remove the proxies and certificates
 if [[ "$OSTYPE" == "darwin"* ]]; then
