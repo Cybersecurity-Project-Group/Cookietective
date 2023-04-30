@@ -1,7 +1,19 @@
+import whois
+import threading
+import sqlite3
 from time import sleep
 
-import whois
-import sqlite3
+# create a global event object
+whoisFound = threading.Event()  # Sets an event that is global
+
+def get_whois_data(whoisDomain):
+    print("Thread started to look up " + whoisDomain)
+    global whoisData
+    whoisData = whois.whois(whoisDomain)
+
+    # set the event to indicate that the whois call is completed
+    whoisFound.set()
+    sleep(1)
 
 def compareWhois(rowNum, database): # given the row number of the table, compare the domain that belongs to the
     conn = sqlite3.connect(database)
@@ -18,17 +30,33 @@ def compareWhois(rowNum, database): # given the row number of the table, compare
     print("Domain Name: " + domainName)
     print("Original URL: " + originalURL)
 
-    # Pull data from Whois
-    domainNameWhois = whois.whois(domainName)
-    sleep(.7) # maybe try to remove this?
-    originalURLWhois = whois.whois(originalURL)
+    # reset the event object
+    whoisFound.clear()
 
+    # Pull data from Whois
+    domainNameWhoisThread = threading.Thread(target=get_whois_data, args=(domainName,))
+    domainNameWhoisThread.start()
+    whoisFound.wait()
+    domainNameWhois = whoisData
     print(domainNameWhois.org)
+
+    # reset the event object
+    domainNameWhoisThread.join()
+    whoisFound.clear()
+
+    # pull data from Whois for other thread
+    originalURLWhoisThread = threading.Thread(target=get_whois_data, args=(originalURL,))
+    originalURLWhoisThread.start()
+    whoisFound.wait()
+    originalURLWhois = whoisData
     print(originalURLWhois.org)
 
-    returnVal = 0
+    # reset these
+    originalURLWhoisThread.join()
+    whoisFound.clear()
 
-    if domainNameWhois == None or originalURLWhois == None:
+    returnVal = 0
+    if domainNameWhois is None or originalURLWhois is None:
         returnVal = 2
 
     # If the organizations are the same, write one to database and return 1
