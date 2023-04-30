@@ -14,7 +14,6 @@ def get_whois_data(whoisDomain):
     # set the event to indicate that the whois call is completed
     whoisFound.set()
     sleep(1)
-    print("Thread finished.")
 
 def compareWhois(rowNum, database): # given the row number of the table, compare the domain that belongs to the
     conn = sqlite3.connect(database)

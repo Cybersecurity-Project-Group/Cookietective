@@ -10,11 +10,10 @@ def get_whois_data(whoisDomain):
     # set the event to indicate that the whois call is completed
     whoisFound.set()
     sleep(1)
-    print("Thread finished.")
 
 '''Test Code'''
 # define the domain names
-domainName = "google.com"
+domainName = "linkedin.com"
 originalURL = "play.google.com"
 
 print("Domain Name: " + domainName)
@@ -29,7 +28,7 @@ domainNameWhoisThread = threading.Thread(target=get_whois_data, args=(domainName
 domainNameWhoisThread.start()
 whoisFound.wait()
 domainNameWhois = whoisData
-print("Domain Name Owner: " + domainNameWhois.org)
+print(domainNameWhois.org)
 
 # reset the event object
 domainNameWhoisThread.join()
@@ -40,7 +39,7 @@ originalURLWhoisThread = threading.Thread(target=get_whois_data, args=(originalU
 originalURLWhoisThread.start()
 whoisFound.wait()
 originalURLWhois = whoisData
-print("Original URL Owner: " + originalURLWhois.org)
+print(originalURLWhois.org)
 
 # reset these
 originalURLWhoisThread.join()
