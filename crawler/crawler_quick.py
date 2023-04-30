@@ -73,7 +73,7 @@ def scrape_links(url, stop_time):
         # check time
         if datetime.datetime.now() >= stop_time:
             # logging.info("Time limit passed")
-            print("Scanned: " + counter + " links")
+            print("Scanned: " + str(counter) + " links")
             return
         
         # send request to URL
@@ -81,7 +81,7 @@ def scrape_links(url, stop_time):
         driver.get(i)
         counter += 1
     
-    print("Scanned: " + counter + " links")
+    print("Scanned: " + str(counter) + " links")
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
