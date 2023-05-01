@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NUM_CONTAINERS=2
-NUM_URLS=16
+NUM_URLS=4
 URLS_PER_CONTAINER=$(( $NUM_URLS/$NUM_CONTAINERS ))
 
 if [[ $# < 1 ]]; then
@@ -21,10 +21,7 @@ for (( i=0 ; i < $NUM_CONTAINERS ; i++ )); do
     end=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*($i+1)))
     
     # run container
-    docker run -dp $UDP_PORT:53/udp -dp $HTTPS_PORT:8080 snickerdoodle $start $end
+    docker run -dp $UDP_PORT:53/udp -dp $HTTPS_PORT:8080 --memory="2g" snickerdoodle $start $end
 
 done
 
-
-# docker run -p 9000:53/udp 9500:8080 snickerdoodle 0 4
-# docker run -p 9001:53/udp 9501:8080 snickerdoodle 5 8
