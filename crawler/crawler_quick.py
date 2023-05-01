@@ -66,7 +66,7 @@ def scrape_links(url, stop_time):
                 queue.add(href)
     
     except Exception as e:
-        logging.info(e)
+        # logging.info(e)
         pass
 
     # visit first layer
@@ -83,7 +83,7 @@ def scrape_links(url, stop_time):
             # logging.info(f"Scanned: {i}")
             counter += 1
         except Exception as e:
-            logging.info(e)
+            # logging.info(e)
             pass
 
     # finish before time limit
