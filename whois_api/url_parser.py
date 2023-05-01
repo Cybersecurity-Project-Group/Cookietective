@@ -211,7 +211,8 @@ def main():
     );
     """
 
-    DB_file = '../database.db'
+    # DB_file = '../database.db'
+    DB_file = '../sampledatabase.db'
 
     conn = sqlite3.connect(DB_file)
     cur = conn.cursor()
