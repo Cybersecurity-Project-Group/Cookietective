@@ -18,7 +18,7 @@ def insertCNAMEpacketsEntry(domainName, sourceAddress, CNAMEAlias, hasAType):
             return
 
         # Insert into the database
-        cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType, None))
+        cur.execute("INSERT INTO CNAMEpackets VALUES (?, ?, ?, ?, ?, ?)", (domainName, sourceAddress, CNAMEAlias, hasAType, None, None))
     except:
         conn.close()
     else:   
@@ -33,7 +33,6 @@ def insertIpEntry(domainName, ip):
     # If fails to INSERT (if already exists as unique value, then do nothing)
     try:
         cur.execute("INSERT INTO ip VALUES (?, ?)", (domainName, ip))
-        cur.execute("INSERT INTO ip VALUES ('hi', 'hi')")
     except:
         conn.close()
     else:
@@ -71,6 +70,21 @@ def insertOriginalURL(URL):
     return
 
     # Update all values in cookie and CNAMEpackets
+def insertWhoisAnalysis(rowNumber, whoisValue):
+    # Connect to the database
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+
+    # Update all whois to be that of the current URL
+    cur.execute("UPDATE CNAMEpackets SET whoisAnalysis = ? WHERE rowid = ?", (whoisValue, rowNumber))
+
+    # Commit changes
+    conn.commit()
+    conn.close()
+
+    return
+
+
 # Fetch functions
 
 def fetchDomainFromAlias(CNAMEAlias):
@@ -97,3 +111,17 @@ def fetchATypeRecordsFromDomain(domainName):
     result = cur.fetchall()
 
     return result
+
+# Function for accuracy checking that will add in the comparator values
+def setComparator(domainName, majmill, notrack):
+    conn = sqlite3.connect('../sampledatabase.db')
+    cur = conn.cursor()
+    try:
+        cur.execute("UPDATE findings SET majmill=?, notrack=? WHERE domainName=?", (majmill, notrack, domainName))
+        conn.commit()
+        conn.close()
+    except:
+        print("Error: Failed to update majmill and notrack values")
+        conn.close()
+    return
+    

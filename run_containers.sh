@@ -1,9 +1,14 @@
 #!/bin/bash
 
-NUM_CONTAINERS=10
-NUM_URLS=3300
-INDEX_OFFSET=0
+NUM_CONTAINERS=8
+NUM_URLS=3600
 URLS_PER_CONTAINER=$(( $NUM_URLS/$NUM_CONTAINERS ))
+
+if [[ $# < 1 ]]; then
+    echo "Error: no offset specified"
+    exit
+fi;
+INDEX_OFFSET=$1
 
 # build image
 docker build -t snickerdoodle .
@@ -14,7 +19,7 @@ for (( i=0 ; i < $NUM_CONTAINERS ; i++ )); do
 
     start=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*$i ))
     end=$(( $INDEX_OFFSET + $URLS_PER_CONTAINER*($i+1)))
-        
+    
     # run container
     docker run -dp $UDP_PORT:53/udp -dp $HTTPS_PORT:8080 snickerdoodle $start $end
 
