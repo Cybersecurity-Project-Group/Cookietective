@@ -305,10 +305,11 @@ def main():
         print(domainName)
         print(originalURL)
         print(domainset)
-        print("\nThese are the general results of the scan: ")
-        print("Scanned:               "+str(scanned))
-        print("Third Party Found:     "+str(thirdparty))
-        print("Vulnerabilities Found: "+str(vuln))
+    
+    print("\nThese are the general results of the scan: ")
+    print("Scanned:               "+str(scanned))
+    print("Third Party Found:     "+str(thirdparty))
+    print("Vulnerabilities Found: "+str(vuln))
     """
         elif whois_res == 1:
             print("NO CLOAKING FOUND\n")
