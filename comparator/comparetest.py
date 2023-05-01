@@ -6,7 +6,9 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import sql.sql_func as sql
 
-dbFile = '../coleisbased.db'
+# dbFile = '../database.db'
+dbFile = '../sampledatabase.db'
+
 dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
 conn = sqlite3.connect(dbFile)
 cur = conn.cursor()
