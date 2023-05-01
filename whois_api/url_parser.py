@@ -258,6 +258,7 @@ def main():
                             conn.commit()
                             thirdparty += 1
                             vuln += 1
+                            print("Vulnerability found for " + originalURL + " from " + domainName)
                         else:
                             conn.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,1,0,0,0))
                             conn.commit()
@@ -272,6 +273,7 @@ def main():
                         conn.commit()
                         thirdparty += 1
                         vuln += 1
+                        print("Vulnerability found for " + originalURL + " from " + domainName)
                     else:
                         conn.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,1,0,0,0))
                         conn.commit()
@@ -287,6 +289,7 @@ def main():
                         conn.commit()
                         thirdparty += 1
                         vuln += 1
+                        print("Vulnerability found for " + originalURL + " from " + domainName)
                     else:
                         conn.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,1,0,0,0))
                         conn.commit()
@@ -295,21 +298,46 @@ def main():
                     cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,0,0,0,0))
                     conn.commit()
 
+    # cur.execute("SELECT domainName,originalURL,domain_setting FROM findings WHERE party=1 AND vuln=1")
+    # c = cur.fetchall()
+    # for curr in c:
+    #     domainName = curr[0]
+    #     originalURL = str(curr[1])
+    #     domainset = curr[2]
+    #     print("These are vulnerable results: ")
+    #     print(domainName)
+    #     print(originalURL)
+    #     print(domainset)
+    
+    # print("\nThese are the general results of the scan: ")
+    # print("Scanned:               "+str(scanned))
+    # print("Third Party Found:     "+str(thirdparty))
+    # print("Vulnerabilities Found: "+str(vuln))
     cur.execute("SELECT domainName,originalURL,domain_setting FROM findings WHERE party=1 AND vuln=1")
     c = cur.fetchall()
     for curr in c:
         domainName = curr[0]
-        originalURL = str(curr[1])
+        #originalURL = str(curr[1])
         domainset = curr[2]
-        print("These are vulnerable results: ")
+        print("\nThese are vulnerable results: ")
         print(domainName)
-        print(originalURL)
+        #print(originalURL)
         print(domainset)
-    
+
+    cur.execute("SELECT domainName,originalURL,domain_setting FROM findings WHERE party=1 AND vuln=0")
+    c = cur.fetchall()
+    thirdparty = len(c)
+
+
+    cur.execute("SELECT domainName,originalURL,domain_setting FROM findings WHERE party=0 AND vuln=0")
+    c = cur.fetchall()
+    scanned = len(c)
+    scanned = scanned + thirdparty + vuln
     print("\nThese are the general results of the scan: ")
     print("Scanned:               "+str(scanned))
     print("Third Party Found:     "+str(thirdparty))
     print("Vulnerabilities Found: "+str(vuln))
+
     """
         elif whois_res == 1:
             print("NO CLOAKING FOUND\n")
