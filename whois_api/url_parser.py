@@ -234,6 +234,7 @@ def main():
     vuln = 0
     scanned = 0
     for m in c:
+        scanned += 1
         rowid = m[0]
         cur.execute("SELECT domainName,originalURL FROM CNAMEpackets WHERE rowid="+str(rowid))
         b = cur.fetchall()
@@ -277,7 +278,6 @@ def main():
                 else:
                     cur.execute("INSERT OR IGNORE INTO findings VALUES (?,?,?,?,?,?,?)",(originalURL,domainName,None,0,0,0,0))
                     conn.commit()
-                    scanned += 1
             except:
                 if compare_url(rowid,DB_file) == False:
                     bad_matching, domainset = cookie_check(rowid,DB_file)
