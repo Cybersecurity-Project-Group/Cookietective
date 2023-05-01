@@ -11,7 +11,7 @@ dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
 conn = sqlite3.connect(dbFile)
 cur = conn.cursor()
 
-cur.execute("SELECT domainName FROM CNAMEpackets")
+cur.execute("SELECT DISTINCT domainName FROM CNAMEpackets")
 results = cur.fetchall()
 
 

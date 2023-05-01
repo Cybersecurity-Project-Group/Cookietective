@@ -21,7 +21,7 @@ def comparator(*stringsin):
                               'NoTracking': [1 if s in notrack else 0 for s in stringsin]})
 
     # print output table
-    # print(outtable)
+    print(outtable)
     return outtable
     #return 0
     
