@@ -242,11 +242,11 @@ def main():
         curr = b[0]
         domainName = curr[0].decode()
         originalURL = str(curr[1])
-        #cur.execute("SELECT originalURL,domainName FROM findings WHERE originalURL=? AND domainName=?",(originalURL,domainName))
-        #k = cur.fetchall()
-        k = 1
+        cur.execute("SELECT originalURL,domainName FROM findings WHERE originalURL=? AND domainName=?",(originalURL,domainName))
+        k = cur.fetchall()
+        count = 0
         if k == 0:
-            continue
+            count += 1
         else:
             try:
                 whoisval = compareWhois(rowid, DB_file)
