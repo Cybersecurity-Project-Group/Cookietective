@@ -6,7 +6,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import sql.sql_func as sql
 
-dbFile = '../coleisbased.db'
+dbFile = '../sampledatabase.db'
 dbFile = os.path.abspath(os.path.join(os.path.dirname(__file__), dbFile))
 conn = sqlite3.connect(dbFile)
 cur = conn.cursor()
@@ -32,7 +32,7 @@ for index, row in df.iterrows():
     domainName = row['Address']+"."
     majmill = row['MajesticMillion']
     notrack = row['NoTracking']
-    print(domainName)
+    # print(domainName)
     # call the setComparator function with the domainName, majmill, and notrack values
     sql.setComparator(domainName, majmill, notrack)
 
