@@ -2,7 +2,7 @@
 
 Cookietective consists of three major components. The first is a data-gathering module consisting of a web crawler and two network traffic scanners, which takes in URLs to gather cookie and CNAME information from. The output is then sent to the second portion of this project, the analysis portion. Here, we look specifically at packets which contain a CNAME record to determine whether or not the packet is being sent from first-party to first-party or to a cloaked third party domain. The final portion of our project is an accuracy checker, which we use to attempt to see how many of the websites flagged by our analysis engine were known third party T/A services.
 
-## Running
+## Running Data-Gathering
 1. Run `git clone https://github.com/Cybersecurity-Project-Group/Cookietective.git` 
 2. Run `cd Cookietective`
 3. Install Python dependencies with `install -r requirements.txt` 
@@ -12,7 +12,10 @@ Cookietective consists of three major components. The first is a data-gathering 
 7. Specify the number of containers, domains needed to scan, and offset into the URL list in `run_containers.sh` (Default: 8 containers, 3600 URLs, and offset of 0)
 8. Run `bash run_containers.sh` to build and spin Containers and start scanning
 9. After containers have exited, run `bash gather_data.sh` to extract the local databases from exited containers and merge into database.db - NOTE: this currently extracts information from ALL exited containers
-10. 
+
+## Running Analysis
+1. Run `cd whois_api`
+2. Run `python3 url_parser.py` to record findings into database.db
 
 ## CNAME Cloaking
 The second method is called CNAME Cloaking, where third party servers are labeled as a subdomain of the first party server through the usage of a CNAME aliasing in the DNS server. CNAMEs unite resources used on a website under a single domain name by providing an alias that actually points to another domain. An identifying CNAME record is created to be part of a subdomain of a first party server, but instead of redirecting to an IP address in the domain, it redirects to a third party. So within the domain, a third party server is seen as if it is a first party subdomain. This can lead to leaking first-party cookies if it is paired with lax cookie settings where the Domain attribute automatically shares cookies with all domains of the ancestor-domain of the origin. Since cookies would be directly shared with all first-party subdomains, third party servers are able to receive whatever cookies the first party vendor specifies. This can create security vulnerabilities, as attackers can use these third party services to inject malicious code or steal user data.
