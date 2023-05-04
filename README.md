@@ -23,7 +23,7 @@ Both of these methods are done with the direct intention of avoiding the built-i
 
 ## Implementation
 
-# Information Gathering
+### Information Gathering
 	
 For the data-gathering phase of our project, we implemented a web crawler using the Selenium framework in Python. The crawler spawns a browser instance (Firefox 112.0.2) using the Mozilla Geckodriver. A list of URLs (obtained from the Majestic Million List) is inputted into the crawler, which iterates through each URL to use as a source node. For each source node, the Selenium driver sends a request and traverses any additional links located on the site (Selenium 2023). The traversal runs in a Breadth-First-Search algorithm and continues for 20 seconds per source node. 
 	
@@ -31,7 +31,7 @@ While the webcrawler generates network traffic, we utilize an HTTPS traffic scan
 
 To scale up the information gathering process, we decided to utilize multiple containers at a time by building a Docker image consisting of the Selenium crawler, network scanners, and SQLite3 database in a Linux environment (Ubuntu 20.04), as seen in Figure 1. Next, we spun up 32 containers across 4 machines, each with distinct ports to separate their traffic from one another and distinct ranges to index into and divide up a list of 17,100 URLs. After every container has completed its crawling process, a Bash script is executed to export the local database inside each excited container and merge them into a central database.
 
-# Analysis	
+### Analysis	
 For the analysis portion of our project we had the greatest challenge determining the method by which we would label first and third party domains. Lists exist of known tracking and advertising services which we could use to match with potential third party domains we parse from the gathered packets. However, it is also possible for a first party different from the current domain to be cloaked and thus act as a third party even though it is not a tracking service. As such, there needed to be a way to check that each packet we gathered had an original URL which was part of the domain we were scanning.
 	
 There are many suggestions on the web of how to do this, whether it was through reverse DNS lookup of IPs or checking databases of known domain names. The issue is that none of these methods are completely reliable. We ended up settling with utilizing a combination of methods to increase the end accuracy of our analysis.
@@ -40,7 +40,7 @@ The first part of our method involved using Whois lookup in order to check if we
 
 The second part of our analysis method utilized a url parser which simply picked apart the urls of the domain and original URL of the site we received a packet from in order to determine if the website belongs to that domain. This was done with a complicated regular expression, but due to the fixed nature of the algorithm this method is prone to more errors than the Whois checker and is therefore used as a secondary means when the Whois is unable to.
 
-# Domain List Comparator
+### Domain List Comparator
 
 To evaluate our vulnerability analysis, we created the Comparator module. The Comparator module takes in the table outputted by the analysis portion as input, checks for the existence of each domain name in the Majestic Million and NoTracking lists, and outputs into the same table whether or not each aliased domain is in each of the domain lists. The Comparator was utilized in our evaluation program comparetest.py by querying the ‘findings’ table in our final SQLite database for the domain names which were obtained from the captured CNAME packets. These domain names were then passed through the Comparator to identify domain names present in either the Majestic Million or NoTracking lists. These results were then committed to the ‘findings’ table in the database.
 
