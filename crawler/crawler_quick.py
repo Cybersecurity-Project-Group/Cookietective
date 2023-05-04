@@ -39,6 +39,9 @@ opts.set_preference("http.response.timeout", scan_time)
 # initiate browser driver
 driver = webdriver.Firefox(options=opts)
 
+# counter for links scanned
+globalCounter = 0
+
 def scrape_links(url, stop_time):  
     counter = 1
     logging.info("--" + url.strip('\n') + "--")
@@ -88,6 +91,7 @@ def scrape_links(url, stop_time):
 
     # finish before time limit
     logging.info("Scanned: " + str(counter) + " links")
+    globalCounter += counter
 
 # iterate thorugh list of URLs to scrape
 for i in range(url_start_index, url_end_index):
@@ -109,3 +113,4 @@ for i in range(url_start_index, url_end_index):
 
 # terminate browser
 driver.quit()
+logging.info(f"counter: {globalCounter}")
